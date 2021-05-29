@@ -1,0 +1,103 @@
+﻿@page "/login"
+
+@layout LoginLayout
+
+@inject NavigationManager NavigationManager
+@inject IAuthenticationService AuthenticationUseCases
+
+<AlertComponent @ref="alertComponent"></AlertComponent>
+
+<div class="login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="../../index2.html">
+                <b>Clires</b>EDC
+            </a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg"><label label-tag="login_msg">Sign in to start your session</label></p>
+                @if (userViewModel != null)
+                {
+                    <EditForm Model="userViewModel" OnValidSubmit="ValidateUser">
+                        <DataAnnotationsValidator></DataAnnotationsValidator>
+                        <ValidationSummary></ValidationSummary>
+                        <div class="input-group mb-3">
+                            <InputText id="username" @bind-Value="userViewModel.UserName" class="form-control" label-tag="username">frank</InputText>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <InputText id="passord" @bind-Value="userViewModel.Password" class="form-control" type="password" label-tag="password">password</InputText>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="icheck-primary">
+                                    <input type="checkbox" id="remember">
+                                    <label for="remember" label-tag="remember_me">Remember Me</label>
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-primary btn-block" label-tag="sign_in">Sign in</button>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <p class="mb-1">
+                            <a href="forgot-password.html" label-tag="forgot_pw">I forgot my password</a>
+                        </p>
+                        <p class="mb-0">
+                            <a href="register.html" class="text-center" label-tag="sign_up">Register a new membership</a>
+                        </p>
+                    </EditForm>
+                }
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+</div>
+<div class="row">
+    <div class="col-6 text-right">
+        <label label-tag="lang">Language</label>
+    </div>
+    <div class="col-6">
+        <select id="langClires" class="form-control lang-dropdown" name="langClires" onchange="changeLanguage(this.value);">
+            <option value="en" label-tag="en">English</option>
+            <option value="vn" label-tag="vn">Vietnamese</option>
+        </select>
+    </div>
+</div>
+
+@code {
+    AlertComponent alertComponent;
+
+    UserLoginModel userViewModel;
+
+    protected override void OnInitialized()
+    {
+        userViewModel = new UserLoginModel();
+        NavigationManager.NavigateTo("login");
+    }
+
+    async Task ValidateUser()
+    {
+        var token = await AuthenticationUseCases.LoginAsync(userViewModel.UserName, userViewModel.Password);
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            alertComponent.ErrorMessage = "Login Failled.";
+            alertComponent.Show();
+        }
+        else
+            NavigationManager.NavigateTo("/home", true);
+    }
+}

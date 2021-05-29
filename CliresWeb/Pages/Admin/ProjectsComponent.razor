@@ -1,0 +1,35 @@
+﻿
+
+@attribute [Authorize]
+@inject IProjectsScreenUseCases ProjectScreenUseCases
+
+<h3>Projects</h3>
+<br />
+@if (projects != null)
+{
+    <ul>
+        @foreach (var project in projects)
+        {
+            <li>
+                <NavLink href="@($"/projects/{project.ProjectId}/tickets")">
+                    @project.Name
+                </NavLink>
+            </li>
+        }
+    </ul>
+}
+
+<h3>Permissions</h3>
+<NavLink href="@($"/permissions")">
+    Click here to display premissions
+</NavLink>
+
+@code {
+    IEnumerable<Project> projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await ProjectScreenUseCases.ViewProjectsAsync();
+    }
+
+}

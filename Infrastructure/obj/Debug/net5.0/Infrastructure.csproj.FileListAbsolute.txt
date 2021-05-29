@@ -1,0 +1,14 @@
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\bin\Debug\net5.0\Infrastructure.deps.json
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\bin\Debug\net5.0\Infrastructure.runtimeconfig.json
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\bin\Debug\net5.0\Infrastructure.runtimeconfig.dev.json
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\bin\Debug\net5.0\Infrastructure.dll
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\bin\Debug\net5.0\ref\Infrastructure.dll
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\bin\Debug\net5.0\Infrastructure.pdb
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\obj\Debug\net5.0\Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\obj\Debug\net5.0\Infrastructure.AssemblyInfoInputs.cache
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\obj\Debug\net5.0\Infrastructure.AssemblyInfo.cs
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\obj\Debug\net5.0\Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\obj\Debug\net5.0\Infrastructure.dll
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\obj\Debug\net5.0\ref\Infrastructure.dll
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\obj\Debug\net5.0\Infrastructure.pdb
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\Infrastructure\obj\Debug\net5.0\Infrastructure.genruntimeconfig.cache

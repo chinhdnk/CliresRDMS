@@ -1,0 +1,15 @@
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\bin\Debug\net5.0\ApplicationCore.deps.json
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\bin\Debug\net5.0\ApplicationCore.dll
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\bin\Debug\net5.0\ref\ApplicationCore.dll
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\bin\Debug\net5.0\ApplicationCore.pdb
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\bin\Debug\net5.0\Infrastructure.dll
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\bin\Debug\net5.0\Infrastructure.pdb
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\obj\Debug\net5.0\ApplicationCore.csproj.AssemblyReference.cache
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\obj\Debug\net5.0\ApplicationCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\obj\Debug\net5.0\ApplicationCore.AssemblyInfoInputs.cache
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\obj\Debug\net5.0\ApplicationCore.AssemblyInfo.cs
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\obj\Debug\net5.0\ApplicationCore.csproj.CoreCompileInputs.cache
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\obj\Debug\net5.0\ApplicationCore.csproj.CopyComplete
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\obj\Debug\net5.0\ApplicationCore.dll
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\obj\Debug\net5.0\ref\ApplicationCore.dll
+C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\ApplicationCore\obj\Debug\net5.0\ApplicationCore.pdb
