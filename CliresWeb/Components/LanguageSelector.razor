@@ -1,0 +1,36 @@
+﻿@inject NavigationManager Nav
+@inject ILanguageContainerService languageContainer
+@inject IJSRuntime JSRuntime
+
+    <div class="row">
+        <div class="col-12">
+            <select id="langClires" class="form-control lang-dropdown" value="@currLanguage" @onchange="SetLanguage">
+                <option value="en-EN">@languageContainer.Keys["layout:en"]</option>
+                <option value="vn-VN">@languageContainer.Keys["layout:vn"]</option>
+            </select>
+        </div>
+    </div>
+
+
+@code
+{
+    private string currLanguage { get; set; } 
+    void SetLanguage(ChangeEventArgs e)
+    {
+        var culture = (string)e.Value;
+        languageContainer.SetLanguage(System.Globalization.CultureInfo.GetCultureInfo(culture));
+        CreateCookie("language", culture, 7);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        currLanguage = await JSRuntime.InvokeAsync<string>("getCookie", "language");
+        if (string.IsNullOrWhiteSpace(currLanguage))
+            currLanguage = "en-EN";
+    }
+
+    private async void CreateCookie(string name, string value, int days)
+    {
+        await JSRuntime.InvokeAsync<string>("createCookie", name, value, days);
+    }
+}

@@ -12,7 +12,6 @@ namespace Infrastructure.Entities.CliresSystem
         public DateTime? PasswordDate { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
-        public string MPhone { get; set; }
         public byte Status { get; set; }
         public bool? OnLogin { get; set; }
         public DateTime? LastLogin { get; set; }
@@ -20,6 +19,7 @@ namespace Infrastructure.Entities.CliresSystem
         public DateTime? ResetPwDate { get; set; }
         public string ResetPwKey { get; set; }
         public DateTime? ExpiredDate { get; set; }
+        public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

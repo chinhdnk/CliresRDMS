@@ -1,37 +1,174 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">CliresSystem</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
+﻿<AuthorizeView>
+    <Authorized>
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="index3.html" class="brand-link">
+                <img src="dist/img/logo.png" alt="Clires Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light" style="font-size: 24px;">Clires EDC</span>
+            </a>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-    </ul>
-</div>
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="info">
+                        <a href="#" class="d-block" style="font-size: 20px;">ADMIN PAGE</a>
+                    </div>
+                </div>
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                         with font-awesome or any other icon font library -->
 
-@code {
-    private bool collapseNavMenu = true;
+                        <li class="nav-item has-treeview menu-open">
+                            <a href="/home" class="nav-link">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>
+                                    Administration
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item pad20">
+                                    <a href="pages/charts/chartjs.html" class="nav-link">
+                                        <i class="fas fa-users nav-icon"></i>
+                                        <p>User</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/charts/flot.html" class="nav-link">
+                                        <i class="fas fa-user-tag nav-icon"></i>
+                                        <p>Group</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <NavLink href="@($"/permissions")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Permission</p>
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p>
+                                    System Configuration
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item pad20">
+                                    <a href="pages/UI/general.html" class="nav-link">
+                                        <i class="fas fa-cog nav-icon"></i>
+                                        <p>System Parameter</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/UI/icons.html" class="nav-link">
+                                        <i class="fas fa-envelope-open-text nav-icon"></i>
+                                        <p>Mailing & SMS</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/UI/buttons.html" class="nav-link">
+                                        <i class="fas fa-language nav-icon"></i>
+                                        <p>Languages</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/UI/sliders.html" class="nav-link">
+                                        <i class="fas fa-address-book nav-icon"></i>
+                                        <p>Contact Information </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="/home" class="nav-link">
+                                <i class="nav-icon fas fa-pencil-alt"></i>
+                                <p>
+                                    Library Management
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item pad20">
+                                    <a href="pages/forms/general.html" class="nav-link">
+                                        <i class="fas fa-book nav-icon"></i>
+                                        <p>Theme</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/forms/advanced.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Variable</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/forms/editors.html" class="nav-link">
+                                        <i class="fas fa-sitemap nav-icon"></i>
+                                        <p>Category</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/forms/validation.html" class="nav-link">
+                                        <i class="fas fa-file-alt nav-icon"></i>
+                                        <p>CRF</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/forms/validation.html" class="nav-link">
+                                        <i class="fas fa-map nav-icon"></i>
+                                        <p>Site</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-newspaper"></i>
+                                <p>
+                                    Logs
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item pad20">
+                                    <a href="pages/tables/simple.html" class="nav-link">
+                                        <i class="fas fa-user-circle nav-icon"></i>
+                                        <p>Online Users</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Access Log</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="fas fa-file-export nav-icon"></i>
+                                        <p>Dataset Export</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pad20">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="fas fa-tasks nav-icon"></i>
+                                        <p>Study Responsibility</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+    </Authorized>
+</AuthorizeView>

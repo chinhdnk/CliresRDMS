@@ -2,10 +2,11 @@
 
 @layout LoginLayout
 
+@inject ILanguageContainerService languageContainer
 @inject NavigationManager NavigationManager
 @inject IAuthenticationService AuthenticationUseCases
 
-<AlertComponent @ref="alertComponent"></AlertComponent>
+
 
 <div class="login-page">
     <div class="login-box">
@@ -17,66 +18,60 @@
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg"><label label-tag="login_msg">Sign in to start your session</label></p>
+                <p class="login-box-msg"><label label-tag="login_msg">@languageContainer.Keys["login:login_msg"]</label></p>
                 @if (userViewModel != null)
                 {
-                    <EditForm Model="userViewModel" OnValidSubmit="ValidateUser">
-                        <DataAnnotationsValidator></DataAnnotationsValidator>
-                        <ValidationSummary></ValidationSummary>
-                        <div class="input-group mb-3">
-                            <InputText id="username" @bind-Value="userViewModel.UserName" class="form-control" label-tag="username">frank</InputText>
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-envelope"></span>
-                                </div>
-                            </div>
+            <EditForm Model="userViewModel" OnValidSubmit="ValidateUser">
+                <AlertComponent @ref="alertComponent"></AlertComponent>
+                @*<DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>*@
+                <div class="input-group mb-3">
+                    <InputText id="username" @bind-Value="userViewModel.UserName" class="form-control" placeholder="@languageContainer.Keys["login:username"]"></InputText>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
                         </div>
-                        <div class="input-group mb-3">
-                            <InputText id="passord" @bind-Value="userViewModel.Password" class="form-control" type="password" label-tag="password">password</InputText>
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <InputText id="passord" @bind-Value="userViewModel.Password" class="form-control" type="password" placeholder="@languageContainer.Keys["login:password"]"></InputText>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
                         </div>
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="icheck-primary">
-                                    <input type="checkbox" id="remember">
-                                    <label for="remember" label-tag="remember_me">Remember Me</label>
-                                </div>
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-primary btn-block" label-tag="sign_in">Sign in</button>
-                            </div>
-                            <!-- /.col -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input type="checkbox" id="remember">
+                            <label for="remember" label-tag="remember_me">@languageContainer.Keys["login:remember_me"]</label>
                         </div>
-                        <p class="mb-1">
-                            <a href="forgot-password.html" label-tag="forgot_pw">I forgot my password</a>
-                        </p>
-                        <p class="mb-0">
-                            <a href="register.html" class="text-center" label-tag="sign_up">Register a new membership</a>
-                        </p>
-                    </EditForm>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block" label-tag="sign_in">@languageContainer.Keys["login:sign_in"]</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <p class="mb-1">
+                    <a href="forgot-password.html" label-tag="forgot_pw">@languageContainer.Keys["login:forgot_pw"]</a>
+                </p>
+                <p class="mb-0">
+                    <a href="register.html" class="text-center" label-tag="sign_up">@languageContainer.Keys["login:sign_up"]</a>
+                </p>
+            </EditForm>
                 }
             </div>
             <!-- /.login-card-body -->
         </div>
     </div>
     <!-- /.login-box -->
-</div>
-<div class="row">
-    <div class="col-6 text-right">
-        <label label-tag="lang">Language</label>
-    </div>
-    <div class="col-6">
-        <select id="langClires" class="form-control lang-dropdown" name="langClires" onchange="changeLanguage(this.value);">
-            <option value="en" label-tag="en">English</option>
-            <option value="vn" label-tag="vn">Vietnamese</option>
-        </select>
+    <div class="card">
+        <LanguageSelector />
     </div>
 </div>
+
 
 @code {
     AlertComponent alertComponent;
@@ -85,19 +80,43 @@
 
     protected override void OnInitialized()
     {
+
         userViewModel = new UserLoginModel();
         NavigationManager.NavigateTo("login");
+        languageContainer.InitLocalizedComponent(this);
     }
 
     async Task ValidateUser()
     {
-        var token = await AuthenticationUseCases.LoginAsync(userViewModel.UserName, userViewModel.Password);
-        if (string.IsNullOrWhiteSpace(token))
+        bool bSuccess = true;
+        string errorMsg = string.Empty;
+        if (!userViewModel.UsernameRequired())
         {
-            alertComponent.ErrorMessage = "Login Failled.";
-            alertComponent.Show();
+            errorMsg += languageContainer.Keys["login:username_required"];
+            bSuccess = false;
+        }
+
+        if (!userViewModel.UsernameRequired())
+        {
+            errorMsg += languageContainer.Keys["login:password_required"];
+            bSuccess = false;
+        }
+
+        if (bSuccess)
+        {
+            var authResult = await AuthenticationUseCases.LoginAsync2(userViewModel.UserName, userViewModel.Password);
+            if (string.IsNullOrWhiteSpace(authResult.Token))
+            {
+                alertComponent.ErrorMessage = languageContainer.Keys[$"login:{authResult.KeyMsg}"];
+                alertComponent.Show();
+            }
+            else
+                NavigationManager.NavigateTo("/home", true);
         }
         else
-            NavigationManager.NavigateTo("/home", true);
+        {
+            alertComponent.ErrorMessage = errorMsg;
+            alertComponent.Show();
+        }
     }
 }

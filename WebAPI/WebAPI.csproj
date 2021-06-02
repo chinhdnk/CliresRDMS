@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
@@ -15,7 +16,6 @@
   <ItemGroup>
     <Folder Include="Controllers\Auth\" />
     <Folder Include="Controllers\V2\" />
-    <Folder Include="Filters\" />
     <Folder Include="QueryFilters\" />
   </ItemGroup>
 

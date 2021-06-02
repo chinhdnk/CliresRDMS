@@ -1,0 +1,109 @@
+﻿@page "/cliressystem/admin/user"
+@inject NavigationManager NavigationManager
+@inject IUserService userService
+@inject ILanguageContainerService languageContainer
+
+@attribute [Authorize]
+    <!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@languageContainer.Keys["permission_detail:permission_management"]</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">@languageContainer.Keys["layout:administration"]</a></li>
+                    <li class="breadcrumb-item active">@languageContainer.Keys["layout:permission"]</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with minimal features & hover style</h3>
+                    </div>
+                    <div class="card-body">
+                        @if (users != null)
+                        {
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>@languageContainer.Keys["user_detail:username"]</th>
+                                        <th>@languageContainer.Keys["user_detail:full_name"]</th>
+                                        <th>@languageContainer.Keys["user_detail:email"]</th>
+                                        <th>@languageContainer.Keys["user_detail:institution"]</th>
+                                        <th>@languageContainer.Keys["user_detail:created_date"]</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var user in users)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <NavLink href="@($"/user/{user.Username}")">
+                                                    @user.Username
+                                                </NavLink>
+                                            </td>
+                                            <td>
+                                                @user.FullName
+                                            </td>
+                                            <td>
+                                                @user.Email
+                                            </td>
+                                            <td>
+                                                @user.Institution
+                                            </td>
+                                            <td>
+                                                @(user.CreatedDate.ToString("yyyy-MM-dd"))
+                                            </td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        }
+
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary" @onclick="AddUser">Add User</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+
+@code {
+    IEnumerable<TblUser> users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        languageContainer.InitLocalizedComponent(this);
+        users = await userService.ViewUserAsync();
+    }
+
+
+    //protected override async Task OnParametersSetAsync()
+    //{
+
+    //}
+
+    private void AddUser()
+    {
+        NavigationManager.NavigateTo($"/user/adduser");
+    }
+}

@@ -18,28 +18,27 @@ namespace ApplicationCore.Services
             this.webApiExecuter = webApiExecuter;
         }
 
-        public async Task<IEnumerable<TblPermission>> ViewPermissionAsync()
+        public async Task<IEnumerable<Permission>> ViewPermissionAsync()
         {
-            return await webApiExecuter.InvokeGet<IEnumerable<TblPermission>>("api/cliressystem/permissions");
+            return await webApiExecuter.InvokeGet<IEnumerable<Permission>>("api/cliressystem/permission");
         }
-
-        public async Task<Permission> GetByIdAsync(int id)
+        public async Task<TblPermission> ViewPermById(int id)
         {
-            return await webApiExecuter.InvokeGet<Permission>($"api/permissions/{id}");
+            return await webApiExecuter.InvokeGet<TblPermission>($"api/cliressystem/permission/{id}");
         }
-        public async Task<int> CreateAsync(Permission permission)
+        public async Task<int> CreatePermAsync(Permission permission)
         {
-            permission = await webApiExecuter.InvokePost("api/permissions", permission);
+            permission = await webApiExecuter.InvokePost("api/permission", permission);
             return permission.PermissionID;
         }
-        public async Task UpdateAsync(Permission permission)
+        public async Task UpdatePermAsync(Permission permission)
         {
-            await webApiExecuter.InvokePut($"api/permissions/{permission.PermissionID}", permission);
+            await webApiExecuter.InvokePut($"api/permission/{permission.PermissionID}", permission);
         }
 
         public async Task DeleteAsync(int id)
         {
-            await webApiExecuter.InvokeDelete($"api/permissions/{id}");
+            await webApiExecuter.InvokeDelete($"api/permission/{id}");
         }
     }
 }

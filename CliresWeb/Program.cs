@@ -6,12 +6,15 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
+using AKSoftware.Localization.MultiLanguages;
+using System.Globalization;
+using ApplicationCore.Services.CliresSystem;
+using ApplicationCore.Services.CliresSystem.Admin;
 
 namespace CliresWeb
 {
@@ -21,6 +24,8 @@ namespace CliresWeb
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
+
+            builder.Services.AddLanguageContainer(Assembly.GetExecutingAssembly());
 
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
@@ -38,6 +43,9 @@ namespace CliresWeb
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 
             builder.Services.AddTransient<IPermissionService, PermissionService>();
+            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IMenuService, MenuService>();
+
             builder.Services.AddTransient<IProjectsScreenUseCases, ProjectsScreenUseCases>();
             builder.Services.AddTransient<IProjectRepository, ProjectRepository>();
             builder.Services.AddTransient<ITicketRepository, TicketRepository>();

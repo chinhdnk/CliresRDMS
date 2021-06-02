@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject ILanguageContainerService languageContainer
+
 <AuthorizeView>
     <Authorized>
         <!-- Navbar -->
@@ -9,28 +11,19 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/" class="nav-link">@languageContainer.Keys["layout:home"]</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="/home/contact" class="nav-link">Contact</a>
+                    <a href="/home/contact" class="nav-link">@languageContainer.Keys["layout:contact"]</a>
                 </li>
             </ul>
-
-            <!-- SEARCH FORM -->
-            <form class="form-inline ml-3">
-                <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
 
             <!-- Right navbar links -->
             <div class="navbar-nav ml-auto">
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <LanguageSelector />
+                    </li>
                     <!-- Messages Dropdown Menu -->
                     <LoginStatusComponent></LoginStatusComponent>
                 </ul>
@@ -46,10 +39,10 @@
 
 
         <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
+            <strong>Copyright &copy; 2014-2019 <a href="http://clires.com">CliresV3.0</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.0.5
+                <b>@languageContainer.Keys["layout:version"]</b> 3.0.5
             </div>
         </footer>
 
@@ -65,4 +58,18 @@
         </div>
     </NotAuthorized>
 </AuthorizeView>
+
+@*@languageContainer.Keys["HomePage:Welcome", new
+    {
+        username = "aksoftware98"
+    }]
+     Welcome: Welcome {username} to the test*@
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        languageContainer.InitLocalizedComponent(this);
+    }
+}
 

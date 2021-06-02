@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Authentication;
+using Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,15 @@ namespace ApplicationCore.Repositories.ApiClient
         }
 
         public async Task<T> InvokePost<T>(string uri, T obj)
+        {
+            await AddTokenHeader();
+            var response = await httpClient.PostAsJsonAsync(GetUrl(uri), obj);
+            await HandleError(response);
+
+            return await response.Content.ReadFromJsonAsync<T>();
+        }
+
+        public async Task<T> InvokeLoginPost<T>(string uri, UserLoginModel obj)
         {
             await AddTokenHeader();
             var response = await httpClient.PostAsJsonAsync(GetUrl(uri), obj);
@@ -78,10 +88,12 @@ namespace ApplicationCore.Repositories.ApiClient
 
         private async Task AddTokenHeader()
         {
-            if (tokenRepository != null && !string.IsNullOrWhiteSpace(await tokenRepository.GetToken()))
+            string token = tokenRepository != null ? await tokenRepository.GetToken() : string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(token))
             {
                 httpClient.DefaultRequestHeaders.Remove("TokenHeader");
-                httpClient.DefaultRequestHeaders.Add("TokenHeader", await tokenRepository.GetToken());
+                httpClient.DefaultRequestHeaders.Add("TokenHeader", token);
             }
         }
     }

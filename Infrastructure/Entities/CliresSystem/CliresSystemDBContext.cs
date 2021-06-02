@@ -22,13 +22,13 @@ namespace Infrastructure.Entities.CliresSystem
         public virtual DbSet<TblGroup> TblGroups { get; set; }
         public virtual DbSet<TblGroupPermission> TblGroupPermissions { get; set; }
         public virtual DbSet<TblMenu> TblMenus { get; set; }
-        public virtual DbSet<TblMenuPermission> TblMenuPermissions { get; set; }
         public virtual DbSet<TblPasswordHistory> TblPasswordHistories { get; set; }
         public virtual DbSet<TblPermission> TblPermissions { get; set; }
         public virtual DbSet<TblSignUp> TblSignUps { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
         public virtual DbSet<TblUserGroup> TblUserGroups { get; set; }
         public virtual DbSet<TblUserPermission> TblUserPermissions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
@@ -73,6 +73,12 @@ namespace Infrastructure.Entities.CliresSystem
                     .IsUnicode(false)
                     .HasColumnName("username");
 
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("created_by");
+
                 entity.Property(e => e.CreatedDate)
                     .HasColumnType("datetime")
                     .HasColumnName("created_date");
@@ -95,11 +101,6 @@ namespace Infrastructure.Entities.CliresSystem
                 entity.Property(e => e.LastLogin)
                     .HasColumnType("datetime")
                     .HasColumnName("last_login");
-
-                entity.Property(e => e.MPhone)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("m_phone");
 
                 entity.Property(e => e.OnLogin).HasColumnName("on_login");
 
@@ -144,7 +145,6 @@ namespace Infrastructure.Entities.CliresSystem
                     .HasColumnName("created_date");
 
                 entity.Property(e => e.ModifiedBy)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("modified_by");
@@ -194,20 +194,26 @@ namespace Infrastructure.Entities.CliresSystem
 
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("created_by");
+                    .HasMaxLength(250)
+                    .HasColumnName("created_by")
+                    .HasDefaultValueSql("(N'chinhdnk')");
 
                 entity.Property(e => e.CreatedDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("created_date");
+                    .HasColumnName("created_date")
+                    .HasDefaultValueSql("(((5)-(31))-(2021))");
+
+                entity.Property(e => e.Icon)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("icon");
 
                 entity.Property(e => e.Link)
                     .HasMaxLength(500)
                     .HasColumnName("link");
 
                 entity.Property(e => e.ModifiedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .HasColumnName("modified_by");
 
                 entity.Property(e => e.ModifiedDate)
@@ -226,29 +232,6 @@ namespace Infrastructure.Entities.CliresSystem
                     .HasColumnName("title");
             });
 
-            modelBuilder.Entity<TblMenuPermission>(entity =>
-            {
-                entity.HasKey(e => new { e.MenuId, e.PermId });
-
-                entity.ToTable("tblMenu_Permission");
-
-                entity.Property(e => e.MenuId).HasColumnName("menu_id");
-
-                entity.Property(e => e.PermId).HasColumnName("perm_id");
-
-                entity.HasOne(d => d.Menu)
-                    .WithMany(p => p.TblMenuPermissions)
-                    .HasForeignKey(d => d.MenuId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tblMenu_Permission_tblMenu");
-
-                entity.HasOne(d => d.Perm)
-                    .WithMany(p => p.TblMenuPermissions)
-                    .HasForeignKey(d => d.PermId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tblMenu_Permission_tblPermission");
-            });
-
             modelBuilder.Entity<TblPasswordHistory>(entity =>
             {
                 entity.HasKey(e => new { e.Username, e.CreatedDate });
@@ -256,7 +239,7 @@ namespace Infrastructure.Entities.CliresSystem
                 entity.ToTable("tblPasswordHistory");
 
                 entity.Property(e => e.Username)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false)
                     .HasColumnName("username");
 
@@ -287,17 +270,20 @@ namespace Infrastructure.Entities.CliresSystem
 
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false)
-                    .HasColumnName("created_by");
+                    .HasColumnName("created_by")
+                    .HasDefaultValueSql("('chinhdnk')");
 
                 entity.Property(e => e.CreatedDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("created_date");
+                    .HasColumnName("created_date")
+                    .HasDefaultValueSql("(((5)-(31))-(2021))");
+
+                entity.Property(e => e.Menu).HasColumnName("menu");
 
                 entity.Property(e => e.ModifiedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false)
                     .HasColumnName("modified_by");
 
@@ -309,8 +295,14 @@ namespace Infrastructure.Entities.CliresSystem
 
                 entity.Property(e => e.Title)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(500)
                     .HasColumnName("title");
+
+                entity.HasOne(d => d.MenuNavigation)
+                    .WithMany(p => p.TblPermissions)
+                    .HasForeignKey(d => d.Menu)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblPermission_tblMenu");
             });
 
             modelBuilder.Entity<TblSignUp>(entity =>
@@ -370,7 +362,7 @@ namespace Infrastructure.Entities.CliresSystem
                 entity.ToTable("tblUser");
 
                 entity.Property(e => e.Username)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false)
                     .HasColumnName("username");
 
@@ -403,10 +395,6 @@ namespace Infrastructure.Entities.CliresSystem
                     .IsUnicode(false)
                     .HasColumnName("email");
 
-                entity.Property(e => e.ExpiredDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("expired_date");
-
                 entity.Property(e => e.FullName)
                     .IsRequired()
                     .HasMaxLength(500)
@@ -416,52 +404,17 @@ namespace Infrastructure.Entities.CliresSystem
                     .HasMaxLength(500)
                     .HasColumnName("institution");
 
-                entity.Property(e => e.LastLogin)
-                    .HasColumnType("datetime")
-                    .HasColumnName("last_login");
-
                 entity.Property(e => e.MPhone)
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("m_phone");
-
-                entity.Property(e => e.ModifiedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("modified_by");
-
-                entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("modified_date");
 
                 entity.Property(e => e.OPhone)
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("o_phone");
 
-                entity.Property(e => e.OnLogin).HasColumnName("on_login");
-
-                entity.Property(e => e.Password)
-                    .HasMaxLength(250)
-                    .IsUnicode(false)
-                    .HasColumnName("password");
-
-                entity.Property(e => e.PasswordDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("password_date");
-
-                entity.Property(e => e.ResetPwDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("reset_pw_date");
-
-                entity.Property(e => e.ResetPwKey)
-                    .HasMaxLength(99)
-                    .HasColumnName("reset_pw_key");
-
                 entity.Property(e => e.Status).HasColumnName("status");
-
-                entity.Property(e => e.WrongTime).HasColumnName("wrong_time");
             });
 
             modelBuilder.Entity<TblUserGroup>(entity =>
@@ -471,7 +424,7 @@ namespace Infrastructure.Entities.CliresSystem
                 entity.ToTable("tblUser_Group");
 
                 entity.Property(e => e.Username)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false)
                     .HasColumnName("username");
 
@@ -497,7 +450,7 @@ namespace Infrastructure.Entities.CliresSystem
                 entity.ToTable("tblUser_Permission");
 
                 entity.Property(e => e.Username)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false)
                     .HasColumnName("username");
 

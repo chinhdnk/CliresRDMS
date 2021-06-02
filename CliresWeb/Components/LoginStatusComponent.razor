@@ -1,0 +1,43 @@
+﻿@inject NavigationManager NavigationManager
+@inject IAuthenticationService AuthenticationUseCases
+@inject ILanguageContainerService languageContainer
+
+@if (userName != null)
+{
+    <li class="nav-item dropdown d-none d-sm-inline-block">
+        <a href="#" class="nav-link" data-toggle="dropdown">@languageContainer.Keys["layout:welcome"] @userName <i class="far fa-users"></i></a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+            <span class="dropdown-item dropdown-header"></span>
+            <div class="dropdown-divider"></div>
+            <a href="" class="dropdown-item" data-toggle="modal" data-target="#modal-changpass">
+                <i class="fa fa-key" aria-hidden="true"></i> <label label-tag="change_pw">@languageContainer.Keys["layout:change_pw"]</label>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="/admin/signout" @onclick="Logout" cclass="dropdown-item dropdown-footer">
+                <i class="fa fa-sign-out" aria-hidden="true"></i><label label-tag="sign_out">@languageContainer.Keys["layout:sign_out"]</label>
+            </a>
+        </div>
+    </li>
+}
+
+@code {
+
+    [CascadingParameter]
+    public Task<AuthenticationState> authenticationState { get; set; }
+
+    string userName;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await authenticationState;
+        userName = state.User.Identity.Name;
+        languageContainer.InitLocalizedComponent(this);
+    }
+
+    async Task Logout()
+    {
+        await AuthenticationUseCases.Logout();
+        NavigationManager.NavigateTo("/", true);
+    }
+
+}

@@ -1,10 +1,29 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\en-EN.yml" />
+    <None Remove="Resources\vn-VN.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\en-EN.yml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\vn-VN.yml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AKSoftware.Localization.MultiLanguages" Version="5.1.0" />
+    <PackageReference Include="AKSoftware.Localization.MultiLanguages.Blazor" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.6" PrivateAssets="all" />

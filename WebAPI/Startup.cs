@@ -1,27 +1,25 @@
 using Infrastructure.Entities;
-using Infrastructure.Repositories;
 using Infrastructure.Entities.CliresSystem;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebAPI.Auth;
+using Infrastructure.Repositories.CiresSystem;
+using Infrastructure.Repositories.CliresSystem;
+using Infrastructure.SqlDataAccess;
 
 namespace WebAPI
 {
     public class Startup
     {
         private readonly IWebHostEnvironment _env;
+        public IConfiguration Configuration { get; }
         //public Startup(IConfiguration configuration)
         //{
         //    Configuration = configuration;
@@ -32,33 +30,44 @@ namespace WebAPI
             this.Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (_env.IsDevelopment())
-            {
-                services.AddDbContext<BugsDBContext>(options =>
-                {
-                    options.UseInMemoryDatabase("Bugs");
-                });
 
-                //Run this scipt in PM to update entity from database at Infrastructure project
-                //Scaffold-DbContext "Server=(local);Database=CLIRES_SYSTEM;User ID=sa;Password=HappyDay01;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities/CliresSystem -Context CliresSystemDBContext -Force
-                services.AddDbContext<CliresSystemDBContext>(c =>
-                c.UseSqlServer(Configuration.GetConnectionString("CliresSystemDB")));
-            }
+            services.AddDbContext<BugsDBContext>(options =>
+            {
+                options.UseInMemoryDatabase("Bugs");
+            });
+
+            //Run this scipt in PM to update entity from database at Infrastructure project
+            //Scaffold-DbContext "Server=(local);Database=CLIRES_SYSTEM;User ID=sa;Password=HappyDay01;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities/CliresSystem -Context CliresSystemDBContext -Force
+            services.AddDbContext<CliresSystemDBContext>(c =>
+            c.UseSqlServer(Configuration.GetConnectionString("CliresSystemDB")));
+
+            var sqlConnectionConfig = new SqlConnectionConfiguration(Configuration.GetConnectionString("ProjectDB"));
+            services.AddSingleton(sqlConnectionConfig);
 
             services.AddControllers();
+            services.AddAuthentication("Bearer").AddJwtBearer("Bearer", 
+                options => { 
+                    options.Authority = "https://localhost:5001";  //TODO: need to configure
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+                });
             services.AddTransient<IJwtTokenManager, JwtTokenManager>();
+            services.AddTransient<IMenuRepository, MenuRepository>();
             services.AddTransient<IPermissionRepository, PermissionRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddApiVersioning(options =>
             {
                 options.ReportApiVersions = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+                options.DefaultApiVersion = new ApiVersion(1, 0);
                 //options.ApiVersionReader = new HeaderApiVersionReader("X-API-Version");
             });
 
@@ -73,9 +82,9 @@ namespace WebAPI
                 {
                     builder.WithOrigins("https://localhost:44323") //CliresWeb
                     .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .SetIsOriginAllowed(origin => true) // allow any origin
-                    .AllowCredentials(); // allow credentials
+                    .AllowAnyMethod();
+                    //.SetIsOriginAllowed(origin => true) // allow any origin
+                    //.AllowCredentials(); // allow credentials
                 });
             });
         }
@@ -102,6 +111,8 @@ namespace WebAPI
 
             app.UseCors();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

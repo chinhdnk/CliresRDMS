@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Repositories.ApiClient;
+using Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,20 @@ namespace ApplicationCore.Authentication
         public async Task<string> LoginAsync(string userName, string password)
         {
             var token = await this.webApiExecuter.InvokePostReturnString("authenticate", new { userName = userName, password = password });
-            await tokenRepository.SetToken(token);
-            if (string.IsNullOrWhiteSpace(token) || token == "\"\"") return null;
+            if (string.IsNullOrWhiteSpace(token) || token == "\"\"") 
+                return null;
 
+            await tokenRepository.SetToken(token);
             return token;
+        }
+
+        public async Task<AuthResult> LoginAsync2(string userName, string password)
+        {
+            AuthResult authResult = await this.webApiExecuter.InvokeLoginPost<AuthResult>("login", new UserLoginModel { UserName = userName, Password = password });
+            if (!string.IsNullOrWhiteSpace(authResult.Token) || authResult.Token != "\"\"") 
+                await tokenRepository.SetToken(authResult.Token);
+
+            return authResult;
         }
 
         public async Task<string> GetUserInfoAsync(string token)

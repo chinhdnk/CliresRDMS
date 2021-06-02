@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Repositories;
+using Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,11 @@ namespace ApplicationCore.Authentication
             return await authenticationRepository.LoginAsync(userName, password);
         }
 
+        public async Task<AuthResult> LoginAsync2(string userName, string password)
+        {
+            return await authenticationRepository.LoginAsync2(userName, password);
+        }
+
         public async Task<string> GetUserInfoAsync(string token)
         {
             return await authenticationRepository.GetUserInfoAsync(token);
@@ -34,5 +40,5 @@ namespace ApplicationCore.Authentication
             await tokenRepository.SetToken(string.Empty);
         }
     }
-    
+
 }

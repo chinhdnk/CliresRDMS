@@ -13,7 +13,7 @@ using BC = BCrypt.Net.BCrypt;
 
 namespace WebAPI.Auth
 {
-    public class JwtTokenManager: IJwtTokenManager
+    public class JwtTokenManager : IJwtTokenManager
     {
         private JwtSecurityTokenHandler tokenHandler;
         private readonly IConfiguration configration;
@@ -25,22 +25,8 @@ namespace WebAPI.Auth
             this.configration = configration;
             this.dbContext = dbContext;
             tokenHandler = new JwtSecurityTokenHandler();
-            secrectKey = Encoding.ASCII.GetBytes(configration.GetValue<string>("JwtSecrectKey"));
+            secrectKey = Encoding.ASCII.GetBytes(configration["Jwt:Key"]);
         }
-
-        //public string Authenticate(string userName, string password)
-        //{
-        //    TblAccount item = dbContext.TblAccounts.Find(userName);
-        //    //validate the credentials              
-        //    if (!string.IsNullOrWhiteSpace(userName) && item.Password != password)
-        //        return string.Empty;
-        //    else
-        //    {
-        //        UserLoginModel account = new UserLoginModel(userName, item.Password);
-        //    }
-        //    //generate token
-        //    return CreateToken(account);
-        //}
 
         public string Authenticate(string userName, string password)
         {
@@ -79,7 +65,52 @@ namespace WebAPI.Auth
                 return tokenHandler.WriteToken(token);
             }
 
-            
+
+        }
+
+        public AuthResult Authenticate2(string userName, string password)
+        {
+            AuthResult authResult = new AuthResult();
+            TblAccount item = dbContext.TblAccounts.Find(userName);
+            //validate the credentials              
+            //if (!string.IsNullOrWhiteSpace(userName) && !BC.Verify(password, item.Password))
+            if (!string.IsNullOrWhiteSpace(userName) && password != item.Password)
+            {
+                authResult.KeyMsg = "username_pw_incorrect";
+                authResult.Token = string.Empty;
+            }
+
+            else
+            {
+                List<Claim> claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Name, userName));
+                claims.Add(new Claim("FullName", item.FullName));
+                claims.Add(new Claim("Email", item.Email));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, configration["Jwt:Subject"]));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()));
+
+                //chinh add role admin for tom
+                if (userName == "lalala")
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, "admin"));
+                }
+
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new System.Security.Claims.ClaimsIdentity(claims),
+                    Expires = DateTime.UtcNow.AddMinutes(30),
+                    SigningCredentials = new SigningCredentials(
+                            new SymmetricSecurityKey(secrectKey),
+                            SecurityAlgorithms.HmacSha256Signature
+                        )
+                };
+
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                authResult.Token = tokenHandler.WriteToken(token);
+                authResult.KeyMsg = "login_success";
+            }
+            return authResult;
         }
 
         public string GetUserInfoByToken(string token)

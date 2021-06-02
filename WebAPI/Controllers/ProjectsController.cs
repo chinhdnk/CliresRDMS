@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Entities;
 using Infrastructure.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace WebAPI.Controllers
     [ApiVersion("1.0")]
     [ApiController]
     [Route("api/[controller]")]
-    [CustomTokenAuthFilter]
+    [JwtAuthorize]
+    //[Authorize]
     public class ProjectsController : ControllerBase
     {
         private readonly BugsDBContext Db;

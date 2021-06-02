@@ -1,8 +1,8 @@
 ﻿using Infrastructure.Models;
+using WebAPI.Auth;
 using Infrastructure.Models.Admin;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WebAPI.Auth;
 
 namespace WebAPI.Controllers.Auth
 {
@@ -19,7 +19,8 @@ namespace WebAPI.Controllers.Auth
         [Route("/authenticate")]
         public Task<string> Authenticate(UserLoginModel userCredential)
         {
-            return Task.FromResult(jwtTokenManager.Authenticate(userCredential.UserName, userCredential.Password));
+            string token = jwtTokenManager.Authenticate(userCredential.UserName, userCredential.Password);
+            return Task.FromResult(token);
 
         }
 
@@ -37,12 +38,13 @@ namespace WebAPI.Controllers.Auth
             return Task.FromResult(jwtTokenManager.GetUserInfoByToken(token.token));
         }
 
-        //[HttpPost]
-        //[Route("/register")]
-        //public async Task<IActionResult> Register(SignUp model)
-        //{
-        //    return Ok();
-        //}
+        [HttpPost]
+        [Route("/login")]
+        public IActionResult Login(UserLoginModel userCredential)
+        {
+            AuthResult authResult = jwtTokenManager.Authenticate2(userCredential.UserName, userCredential.Password);
+            return Ok(authResult);
+        }
     }
     public class Token
     {        public string token { get; set; }

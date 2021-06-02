@@ -25,5 +25,27 @@ namespace Infrastructure.Models
         public UserLoginModel()
         {
         }
+
+        public bool UsernameRequired()
+        {
+            return !string.IsNullOrWhiteSpace(UserName);
+        }
+
+        public bool PasswordRequired()
+        {
+            return !string.IsNullOrWhiteSpace(Password);
+        }
+    }
+
+    public class UserIdentity
+    {
+        public string Username { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+    }
+    public class AuthResult
+    {
+        public string KeyMsg { get; set; }
+        public string Token { get; set; }
     }
 }
