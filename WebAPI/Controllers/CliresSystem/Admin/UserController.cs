@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using WebApi.Filters;
 using Infrastructure.Models.Admin;
 using Infrastructure.Constant;
-using Infrastructure.Repositories.CliresSystem;
+using ApplicationCore.Repositories.CliresSystem;
 
 namespace WebAPI.Controllers.CliresSystem.Admin
 {

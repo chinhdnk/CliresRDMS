@@ -69,7 +69,7 @@ namespace Infrastructure.Entities.CliresSystem
                 entity.ToTable("tblAccount");
 
                 entity.Property(e => e.Username)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false)
                     .HasColumnName("username");
 
@@ -121,6 +121,11 @@ namespace Infrastructure.Entities.CliresSystem
                     .HasMaxLength(99)
                     .HasColumnName("reset_pw_key");
 
+                entity.Property(e => e.Salt)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("salt");
+
                 entity.Property(e => e.Status).HasColumnName("status");
 
                 entity.Property(e => e.WrongTime).HasColumnName("wrong_time");
@@ -169,7 +174,10 @@ namespace Infrastructure.Entities.CliresSystem
 
                 entity.Property(e => e.GroupId).HasColumnName("group_id");
 
-                entity.Property(e => e.PermId).HasColumnName("perm_id");
+                entity.Property(e => e.PermId)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("perm_id");
 
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.TblGroupPermissions)
@@ -266,7 +274,10 @@ namespace Infrastructure.Entities.CliresSystem
 
                 entity.ToTable("tblPermission");
 
-                entity.Property(e => e.PermId).HasColumnName("perm_id");
+                entity.Property(e => e.PermId)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("perm_id");
 
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
@@ -292,11 +303,6 @@ namespace Infrastructure.Entities.CliresSystem
                     .HasColumnName("modified_date");
 
                 entity.Property(e => e.Status).HasColumnName("status");
-
-                entity.Property(e => e.Title)
-                    .IsRequired()
-                    .HasMaxLength(500)
-                    .HasColumnName("title");
 
                 entity.HasOne(d => d.MenuNavigation)
                     .WithMany(p => p.TblPermissions)
@@ -454,7 +460,10 @@ namespace Infrastructure.Entities.CliresSystem
                     .IsUnicode(false)
                     .HasColumnName("username");
 
-                entity.Property(e => e.PermId).HasColumnName("perm_id");
+                entity.Property(e => e.PermId)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("perm_id");
 
                 entity.HasOne(d => d.Perm)
                     .WithMany(p => p.TblUserPermissions)
@@ -466,7 +475,7 @@ namespace Infrastructure.Entities.CliresSystem
                     .WithMany(p => p.TblUserPermissions)
                     .HasForeignKey(d => d.Username)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tblUser_Permission_tblUser");
+                    .HasConstraintName("FK_tblUser_Permission_tblUser_Permission");
             });
 
             OnModelCreatingPartial(modelBuilder);

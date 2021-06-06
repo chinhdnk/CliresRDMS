@@ -1,5 +1,4 @@
-﻿using Infrastructure.Entities.CliresSystem;
-using Infrastructure.Models.MenuPage;
+﻿using Infrastructure.Models.CliresSystem;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

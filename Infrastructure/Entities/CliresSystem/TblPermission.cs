@@ -13,8 +13,7 @@ namespace Infrastructure.Entities.CliresSystem
             TblUserPermissions = new HashSet<TblUserPermission>();
         }
 
-        public int PermId { get; set; }
-        public string Title { get; set; }
+        public string PermId { get; set; }
         public bool Status { get; set; }
         public int Menu { get; set; }
         public string CreatedBy { get; set; }

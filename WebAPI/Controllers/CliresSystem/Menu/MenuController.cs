@@ -1,5 +1,5 @@
 ﻿using Infrastructure.Entities.CliresSystem;
-using Infrastructure.Repositories.CiresSystem;
+using ApplicationCore.Repositories.CiresSystem;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WebApi.Filters;
@@ -8,6 +8,9 @@ using System.Security.Claims;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+using WebAPI.Auth;
+using Infrastructure.Constant;
 
 namespace WebAPI.Controllers.CliresSystem
 {
@@ -18,16 +21,17 @@ namespace WebAPI.Controllers.CliresSystem
     public class MenuController : ControllerBase
     {
         private readonly IMenuRepository menuRepository;
-        public MenuController(IMenuRepository menuRepository)
+        private readonly IJwtTokenManager jwtTokenManager;
+        public MenuController(IMenuRepository menuRepository, IJwtTokenManager jwtTokenManager)
         {
             this.menuRepository = menuRepository;
+            this.jwtTokenManager = jwtTokenManager;
         }
         [HttpGet]
         public IActionResult Get()
         {
-            var identity = (ClaimsIdentity)User.Identity;
-            IEnumerable<Claim> claims = identity.Claims;
-            return Ok( menuRepository.GetMenuList("chinhdnk"));
+            var username = HttpContext.Items[UserIdentityConstant.USERNAME].ToString();
+            return Ok( menuRepository.GetMenuList(username));
         }
     }
 }

@@ -38,6 +38,14 @@
     confirm: Xác nhận
     ok: Đồng ý
     next: Tiếp theo
+  button: 
+    save: Lưu
+    edit: Sửa
+    add_new: Thêm mới
+    delete: Xóa
+    cancel: Hủy
+    ok: Ok
+    back: Quay lại
   error_page:
     error_500: 500 Error Page
     system_error: System error
@@ -52,6 +60,7 @@
     email: Email
     re-password: Nhập lại mật khẩu
     sign_in: Đăng Nhập
+    sign_out: Đăng xuất
     forgot_pw: Quên mật khẩu
     sign_up: Đăng Ký
     sys_msg: Thông Báo Hệ Thống
@@ -98,6 +107,7 @@
     phone_maximum: Vui lòng nhập số điện thoại nhỏ hơn 12 chữ số
     select_one_more_project: Chọn ngiên cứu
     fullname_maximum: Độ dài tối đa 30 ký tự
+    login_fail: Đăng nhập thất bại, vui lòng liên hệ quản trị
   home: 
     contact: Liên hệ
     email: Địa chỉ Email
@@ -125,7 +135,6 @@
     extend: Gia hạn tài khoản
     approve: Xác Nhận và Lưu
     reject: Từ Chối
-    save: Lưu
     user_name: Tên Tài Khoản
     user_name_maxlength: Tên Tài Khoản tối đa 15 ký tự
     full_name: Họ & Tên
@@ -168,7 +177,6 @@
     title: Thông Tin Nhóm
     group_mngt: Quản Lý Nhóm
     active: Kích hoạt
-    save: Lưu
     lock: Khóa
     group_name: Tên Nhóm
     description: Miêu Tả
@@ -183,7 +191,7 @@
     perform_success: Performing successfully
     unlock_success: Mở khóa nhóm thành công
     locked_success: Khóa nhóm thành công
-  permission_detail: 
+  permission: 
     home: Trang Chủ
     permission_management: Quản lý quyền
     add_permission: Thêm quyền
@@ -191,8 +199,8 @@
     permission_name: Tên quyền
     title: Thông Tin Nhóm
     group_mngt: Quản Lý Nhóm
+    action: Hành động
     active: Kích hoạt
-    save: Lưu
     lock: Khóa
     group_name: Tên Nhóm
     description: Miêu Tả

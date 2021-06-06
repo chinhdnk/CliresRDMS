@@ -10,58 +10,65 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
 using WebAPI.Auth;
-using Infrastructure.Repositories.CiresSystem;
-using Infrastructure.Repositories.CliresSystem;
+using ApplicationCore.Repositories.CiresSystem;
+using ApplicationCore.Repositories.CliresSystem;
 using Infrastructure.SqlDataAccess;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace WebAPI
 {
     public class Startup
     {
-        private readonly IWebHostEnvironment _env;
-        public IConfiguration Configuration { get; }
-        //public Startup(IConfiguration configuration)
-        //{
-        //    Configuration = configuration;
-        //}
+        private readonly IWebHostEnvironment env;
+        public IConfiguration configuration { get; set; }
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
-            this._env = env;
-            this.Configuration = configuration;
+            this.env = env;
+            this.configuration = configuration;
         }
-
-
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddDbContext<BugsDBContext>(options =>
-            {
-                options.UseInMemoryDatabase("Bugs");
-            });
-
+            //*****************************************
             //Run this scipt in PM to update entity from database at Infrastructure project
             //Scaffold-DbContext "Server=(local);Database=CLIRES_SYSTEM;User ID=sa;Password=HappyDay01;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities/CliresSystem -Context CliresSystemDBContext -Force
-            services.AddDbContext<CliresSystemDBContext>(c =>
-            c.UseSqlServer(Configuration.GetConnectionString("CliresSystemDB")));
+            //Remove OnConfiguring in CliresSystemDBContext
+            //*****************************************
 
-            var sqlConnectionConfig = new SqlConnectionConfiguration(Configuration.GetConnectionString("ProjectDB"));
+            services.AddDbContext<CliresSystemDBContext>(c =>
+            c.UseSqlServer(configuration.GetConnectionString("CliresSystemDB")));
+
+            //*****************************************
+            //Configure to connect database by SqlConnection
+            //*****************************************
+            var sqlConnectionConfig = new SqlConnectionConfiguration(configuration.GetConnectionString("ProjectDB"));
             services.AddSingleton(sqlConnectionConfig);
 
             services.AddControllers();
-            services.AddAuthentication("Bearer").AddJwtBearer("Bearer", 
-                options => { 
-                    options.Authority = "https://localhost:5001";  //TODO: need to configure
-                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                    {
-                        ValidateAudience = false
-                    };
-                });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+            {
+                option.RequireHttpsMetadata = false;
+                option.SaveToken = true;
+                option.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidAudience= configuration["Jwt:Audience"],
+                    ValidIssuer= configuration["Jwt:Issuer"],
+                    IssuerSigningKey= new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"]))
+                };
+            });
+
             services.AddTransient<IJwtTokenManager, JwtTokenManager>();
             services.AddTransient<IMenuRepository, MenuRepository>();
+            services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<IPermissionRepository, PermissionRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddApiVersioning(options =>
             {
@@ -83,31 +90,26 @@ namespace WebAPI
                     builder.WithOrigins("https://localhost:44323") //CliresWeb
                     .AllowAnyHeader()
                     .AllowAnyMethod();
-                    //.SetIsOriginAllowed(origin => true) // allow any origin
-                    //.AllowCredentials(); // allow credentials
                 });
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, BugsDBContext context)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                //Create the in-memory database for dev environment
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
 
                 //Configure OpenAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(
                         options => {
                             options.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1");
-                            options.SwaggerEndpoint("/swagger/v2/swagger.json", "WebAPI v2");
                         });
             }
+
+            loggerFactory.AddFile(configuration["LogFile"]);
 
             app.UseCors();
             app.UseRouting();

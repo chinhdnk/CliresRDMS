@@ -1,4 +1,4 @@
-﻿using ApplicationCore.Repositories;
+﻿using Infrastructure.Constant;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using ApplicationCore.Authentication;
+using ApplicationCore.Repositories;
 
 namespace CliresWeb
 {
@@ -22,8 +22,8 @@ namespace CliresWeb
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-
             var tokenString = await tokenRepository.GetToken();
+
             if (!string.IsNullOrWhiteSpace(tokenString))
             {
                 var tokenJwt = tokenHandler.ReadToken(tokenString.Replace("\"", string.Empty)) as JwtSecurityToken;
@@ -34,11 +34,17 @@ namespace CliresWeb
                     claims.AddRange(tokenJwt.Claims);
 
                     var nameClaim = tokenJwt.Claims.FirstOrDefault(x => x.Type == "unique_name");
-                    var roleClaim = tokenJwt.Claims.FirstOrDefault(x => x.Type == "role");
+                    var roleClaims = tokenJwt.Claims.Where(x => x.Type == "role");
                     if (nameClaim != null) claims.Add(new Claim(ClaimTypes.Name, nameClaim.Value));
-                    if (roleClaim != null) claims.Add(new Claim(ClaimTypes.Role, roleClaim.Value));
+                    if (roleClaims != null)
+                    {
+                        foreach(var role in roleClaims)
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, role.Value));
+                        }
+                    }
 
-                    var identity = new ClaimsIdentity(claims, "Custom Token Auth");
+                    var identity = new ClaimsIdentity(claims, "Token Auth");
                     var principal = new ClaimsPrincipal(identity);
 
                     return new AuthenticationState(principal);

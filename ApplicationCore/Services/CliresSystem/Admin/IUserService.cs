@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ApplicationCore.Services.CliresSystem.Admin
+namespace ApplicationCore.Services.CliresSystem
 {
     public interface IUserService
     {

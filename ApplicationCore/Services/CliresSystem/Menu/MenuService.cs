@@ -1,6 +1,5 @@
 ﻿using ApplicationCore.Repositories.ApiClient;
-using Infrastructure.Entities.CliresSystem;
-using Infrastructure.Models.MenuPage;
+using Infrastructure.Models.CliresSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,20 +1,20 @@
-﻿@inject NavigationManager NavigationManager
-@inject IAuthenticationService AuthenticationUseCases
+﻿@inject NavigationManager navigationManager
+@inject IAccountService accountService
 @inject ILanguageContainerService languageContainer
 
 @if (userName != null)
 {
     <li class="nav-item dropdown d-none d-sm-inline-block">
-        <a href="#" class="nav-link" data-toggle="dropdown">@languageContainer.Keys["layout:welcome"] @userName <i class="far fa-users"></i></a>
+        <a href="#" class="nav-link" data-toggle="dropdown">@languageContainer.Keys["layout:welcome"] @fullName <i class="far fa-users"></i></a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
             <span class="dropdown-item dropdown-header"></span>
             <div class="dropdown-divider"></div>
-            <a href="" class="dropdown-item" data-toggle="modal" data-target="#modal-changpass">
-                <i class="fa fa-key" aria-hidden="true"></i> <label label-tag="change_pw">@languageContainer.Keys["layout:change_pw"]</label>
+            <a href="#" @onclick="ChangePassword" class="dropdown-item" data-toggle="modal" data-target="#modal-changpass">
+                <i class="fa fa-key" aria-hidden="true"></i> @languageContainer.Keys["layout:change_pw"]
             </a>
             <div class="dropdown-divider"></div>
-            <a href="/admin/signout" @onclick="Logout" cclass="dropdown-item dropdown-footer">
-                <i class="fa fa-sign-out" aria-hidden="true"></i><label label-tag="sign_out">@languageContainer.Keys["layout:sign_out"]</label>
+            <a href="#" @onclick="Logout" class="dropdown-item dropdown-footer">
+                <i class="fa fa-sign-out" aria-hidden="true"></i> @languageContainer.Keys["layout:sign_out"]
             </a>
         </div>
     </li>
@@ -26,18 +26,25 @@
     public Task<AuthenticationState> authenticationState { get; set; }
 
     string userName;
+    string fullName;
 
     protected override async Task OnInitializedAsync()
     {
-        var state = await authenticationState;
-        userName = state.User.Identity.Name;
+        var authState = await authenticationState;
+        var user = authState.User;
+        userName = user.FindFirst(c => c.Type == "unique_name")?.Value;
+        fullName = user.FindFirst(c => c.Type == "FullName")?.Value;
         languageContainer.InitLocalizedComponent(this);
     }
 
+    private void ChangePassword()
+    {
+        navigationManager.NavigateTo("/changepassword", true);
+    }
     async Task Logout()
     {
-        await AuthenticationUseCases.Logout();
-        NavigationManager.NavigateTo("/", true);
+        await accountService.Logout();
+        navigationManager.NavigateTo("/", true);
     }
 
 }

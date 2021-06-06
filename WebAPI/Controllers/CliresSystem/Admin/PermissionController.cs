@@ -1,15 +1,11 @@
 ﻿using Infrastructure.Entities.CliresSystem;
-using Infrastructure.Repositories.CiresSystem;
-using Infrastructure.Models;
+using ApplicationCore.Repositories.CiresSystem;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Filters;
-using Infrastructure.Models.Admin;
-using Infrastructure.Constant;
+using Infrastructure.Models.CliresSystem;
 
 namespace WebAPI.Controllers.CliresSystem
 {
@@ -29,12 +25,11 @@ namespace WebAPI.Controllers.CliresSystem
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-
             return Ok(await permissionRepository.GetPermissionList());
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(string id)
         {
             TblPermission item = await dbContext.TblPermissions.Where(x => x.PermId == id).FirstOrDefaultAsync();
             if (item == null)
@@ -43,6 +38,7 @@ namespace WebAPI.Controllers.CliresSystem
         }
 
         //[HttpPost]
+        //[JwtAuthorize("PERMISSION_CREATE")]
         //public async Task<IActionResult> Post([FromBody] Permission permission)
         //{
         //    int permId = await permissionRepository.CreatePermission(permission);
@@ -56,7 +52,8 @@ namespace WebAPI.Controllers.CliresSystem
 
 
         [HttpPut("{permId}")]
-        public async Task<IActionResult> Put(int permId, Permission permission)
+        [JwtAuthorize("PERMISSION_EDIT")]
+        public async Task<IActionResult> Put(string permId, Permission permission)
         {
             if (permId != permission.PermissionID) return BadRequest();
             int result= await permissionRepository.UpdatePermission(permId, permission);

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationCore.Services.CliresSystem.Admin
+namespace ApplicationCore.Services.CliresSystem
 {
     public class UserService : IUserService
     {

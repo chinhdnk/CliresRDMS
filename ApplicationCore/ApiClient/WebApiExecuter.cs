@@ -1,8 +1,5 @@
-﻿using ApplicationCore.Authentication;
+﻿using Infrastructure.Constant;
 using Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -41,7 +38,7 @@ namespace ApplicationCore.Repositories.ApiClient
             return await response.Content.ReadFromJsonAsync<T>();
         }
 
-        public async Task<T> InvokeLoginPost<T>(string uri, UserLoginModel obj)
+        public async Task<T> InvokeLoginPost<T>(string uri, AuthenticateRequest obj)
         {
             await AddTokenHeader();
             var response = await httpClient.PostAsJsonAsync(GetUrl(uri), obj);
@@ -92,8 +89,8 @@ namespace ApplicationCore.Repositories.ApiClient
 
             if (!string.IsNullOrWhiteSpace(token))
             {
-                httpClient.DefaultRequestHeaders.Remove("TokenHeader");
-                httpClient.DefaultRequestHeaders.Add("TokenHeader", token);
+                httpClient.DefaultRequestHeaders.Remove(UserIdentityConstant.TOKEN_HEADER);
+                httpClient.DefaultRequestHeaders.Add(UserIdentityConstant.TOKEN_HEADER, token);
             }
         }
     }

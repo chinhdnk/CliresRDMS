@@ -1,16 +1,13 @@
-﻿<div class="alert alert-danger"
+﻿<div class="alert @AlertTheme"
      style="@($"display: {display}")"
      role="alert">
-    @ErrorMessage
-    <button type="button"
-            @onclick="Dismiss"
-            class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
+    @((MarkupString)ErrorMessage)
+
 </div>
 
 @code {
     string display = "none";
+    public string AlertTheme { get; set; } = "alert-warning";
 
     public string ErrorMessage { get; set; }
 

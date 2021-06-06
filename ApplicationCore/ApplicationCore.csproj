@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ApiClient\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.JSInterop" Version="5.0.6" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>

@@ -1,0 +1,127 @@
+﻿@page "/login"
+
+@layout LoginLayout
+
+@using System.Text
+
+@inject ILanguageContainerService languageContainer
+@inject NavigationManager navigationManager
+@inject IAccountService accountService
+
+<div class="login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="../../index2.html">
+                <b>Clires</b>EDC
+            </a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg"><label label-tag="login_msg">@languageContainer.Keys["login:login_msg"]</label></p>
+                @if (userViewModel != null)
+                {
+            <EditForm Model="userViewModel" OnValidSubmit="ValidateUser">
+                <AlertComponent @ref="alertComponent"></AlertComponent>
+                <div class="input-group mb-3">
+                    <InputText id="username" @bind-Value="userViewModel.UserName" class="form-control" placeholder="@languageContainer.Keys["login:username"]"></InputText>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <InputText id="passord" @bind-Value="userViewModel.Password" class="form-control" type="password" placeholder="@languageContainer.Keys["login:password"]"></InputText>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input type="checkbox" id="remember" @bind-value="@userViewModel.RememberMe">
+                            <label for="remember">
+                                @languageContainer.Keys["login:remember_me"]
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary">@languageContainer.Keys["login:sign_in"]</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <p class="mb-1">
+                    <NavLink href="@("/forgot-password")">@languageContainer.Keys["login:forgot_pw"]</NavLink>
+                </p>
+                <p class="mb-0">
+                    <NavLink href="@("/register")" class="text-center">@languageContainer.Keys["login:sign_up"]</NavLink>
+                </p>
+                <p class="mb-1">
+                    Username: admin; Password: password@Admin
+                </p>
+            </EditForm>
+                }
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <div class="card">
+        <LanguageSelector />
+    </div>
+</div>
+
+
+@code {
+    AlertComponent alertComponent;
+
+    AuthenticateRequest userViewModel;
+
+    protected override void OnInitialized()
+    {
+
+        userViewModel = new AuthenticateRequest();
+        userViewModel.UserName = "admin";
+        userViewModel.Password = "password@Admin";
+        languageContainer.InitLocalizedComponent(this);
+    }
+
+    async Task ValidateUser()
+    {
+        bool bSuccess = true;
+        StringBuilder errorMsg = new StringBuilder();
+        if (string.IsNullOrWhiteSpace(userViewModel.UserName))
+        {
+            errorMsg.Append(languageContainer.Keys["login:username_required"]);
+            errorMsg.Append("<br/>");
+            bSuccess = false;
+        }
+
+        if (string.IsNullOrWhiteSpace(userViewModel.Password))
+        {
+            errorMsg.Append(languageContainer.Keys["login:password_required"]);
+            bSuccess = false;
+        }
+
+        if (bSuccess)
+        {
+            var authenticateResponse = await accountService.LoginAsync2(userViewModel.UserName, userViewModel.Password);
+            if (string.IsNullOrWhiteSpace(authenticateResponse.Token))
+            {
+                alertComponent.ErrorMessage = languageContainer.Keys[$"login:{authenticateResponse.KeyMsg}"];
+                alertComponent.Show();
+            }
+            else
+                navigationManager.NavigateTo("/useridentity", true);
+        }
+        else
+        {
+            alertComponent.ErrorMessage = errorMsg.ToString();
+            alertComponent.Show();
+        }
+    }
+}

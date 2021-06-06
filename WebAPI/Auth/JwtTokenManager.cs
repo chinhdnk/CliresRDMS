@@ -1,5 +1,8 @@
-﻿using Infrastructure.Entities.CliresSystem;
+﻿using Infrastructure.Constant;
+using Infrastructure.Entities.CliresSystem;
 using Infrastructure.Models;
+using ApplicationCore.Repositories.CiresSystem;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -16,32 +19,33 @@ namespace WebAPI.Auth
     public class JwtTokenManager : IJwtTokenManager
     {
         private JwtSecurityTokenHandler tokenHandler;
-        private readonly IConfiguration configration;
+        private readonly IConfiguration configuration;
         private readonly CliresSystemDBContext dbContext;
+        private readonly IPermissionRepository permissionRepository;
         private byte[] secrectKey;
 
-        public JwtTokenManager(IConfiguration configration, CliresSystemDBContext dbContext)
+        public JwtTokenManager(IConfiguration configuration, CliresSystemDBContext dbContext, IPermissionRepository permissionRepository)
         {
-            this.configration = configration;
+            this.configuration = configuration;
             this.dbContext = dbContext;
+            this.permissionRepository = permissionRepository;
             tokenHandler = new JwtSecurityTokenHandler();
-            secrectKey = Encoding.ASCII.GetBytes(configration["Jwt:Key"]);
+            secrectKey = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]);
         }
 
         public string Authenticate(string userName, string password)
         {
             TblAccount item = dbContext.TblAccounts.Find(userName);
             //validate the credentials              
-            //if (!string.IsNullOrWhiteSpace(userName) && !BC.Verify(password, item.Password))
-            if (!string.IsNullOrWhiteSpace(userName) && password != item.Password)
+            if (!string.IsNullOrWhiteSpace(userName) && !BC.Verify(password, item.Password))
                 return string.Empty;
             else
             {
                 List<Claim> claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Name, userName));
-                claims.Add(new Claim("FullName", item.FullName));
-                claims.Add(new Claim("Email", item.Email));
-                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, configration["Jwt:Subject"]));
+                claims.Add(new Claim(UserIdentityConstant.FULL_NAME, item.FullName));
+                claims.Add(new Claim(ClaimTypes.Email, item.Email));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, configuration["Jwt:Subject"]));
                 claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
                 claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()));
 
@@ -53,7 +57,7 @@ namespace WebAPI.Auth
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    Subject = new System.Security.Claims.ClaimsIdentity(claims),
+                    Subject = new ClaimsIdentity(claims),
                     Expires = DateTime.UtcNow.AddMinutes(30),
                     SigningCredentials = new SigningCredentials(
                             new SymmetricSecurityKey(secrectKey),
@@ -64,68 +68,88 @@ namespace WebAPI.Auth
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 return tokenHandler.WriteToken(token);
             }
-
-
         }
 
-        public AuthResult Authenticate2(string userName, string password)
+        public AuthenticateResponse Authenticate2(string userName, string password)
         {
-            AuthResult authResult = new AuthResult();
-            TblAccount item = dbContext.TblAccounts.Find(userName);
-            //validate the credentials              
-            //if (!string.IsNullOrWhiteSpace(userName) && !BC.Verify(password, item.Password))
-            if (!string.IsNullOrWhiteSpace(userName) && password != item.Password)
+            AuthenticateResponse authenticateResponse = new AuthenticateResponse();
+            try
             {
-                authResult.KeyMsg = "username_pw_incorrect";
-                authResult.Token = string.Empty;
-            }
-
-            else
-            {
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Name, userName));
-                claims.Add(new Claim("FullName", item.FullName));
-                claims.Add(new Claim("Email", item.Email));
-                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, configration["Jwt:Subject"]));
-                claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-                claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()));
-
-                //chinh add role admin for tom
-                if (userName == "lalala")
+                TblAccount account = dbContext.TblAccounts.Find(userName);
+                //IEnumerable<string> listPerms= dbContext.TblUserGroups
+                if (account == null || !BC.Verify(account.Salt + password, account.Password))
                 {
-                    claims.Add(new Claim(ClaimTypes.Role, "admin"));
+                    authenticateResponse.KeyMsg = "username_pw_incorrect";
+                    authenticateResponse.Token = string.Empty;
                 }
-
-                var tokenDescriptor = new SecurityTokenDescriptor
+                else
                 {
-                    Subject = new System.Security.Claims.ClaimsIdentity(claims),
-                    Expires = DateTime.UtcNow.AddMinutes(30),
-                    SigningCredentials = new SigningCredentials(
-                            new SymmetricSecurityKey(secrectKey),
-                            SecurityAlgorithms.HmacSha256Signature
-                        )
-                };
+                    IQueryable<string> listPerm = permissionRepository.GetPermOfUser(userName);
+                    List<Claim> claims = new List<Claim>();
+                    claims.Add(new Claim(ClaimTypes.Name, userName));
+                    claims.Add(new Claim(UserIdentityConstant.FULL_NAME, account.FullName));
+                    claims.Add(new Claim(UserIdentityConstant.EMAIL, account.Email));
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Sub, configuration["Jwt:Subject"]));
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()));
 
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                authResult.Token = tokenHandler.WriteToken(token);
-                authResult.KeyMsg = "login_success";
+                    //claims.Add(new Claim(ClaimTypes.Role, "admin"));
+                    foreach (var perm in listPerm)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, perm));
+                    }
+
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(claims),
+                        Expires = DateTime.UtcNow.AddMinutes(30),
+                        SigningCredentials = new SigningCredentials(
+                                new SymmetricSecurityKey(secrectKey),
+                                SecurityAlgorithms.HmacSha256Signature
+                            )
+                    };
+
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    authenticateResponse.Username = userName;
+                    authenticateResponse.Token = tokenHandler.WriteToken(token);
+                    authenticateResponse.KeyMsg = "login_success";
+                }
             }
-            return authResult;
+            catch (Exception)
+            {
+                authenticateResponse.KeyMsg = "login_fail";
+            }
+            return authenticateResponse;
         }
 
-        public string GetUserInfoByToken(string token)
+        public string GetUserNameByToken(string token)
         {
             if (string.IsNullOrWhiteSpace(token)) return null;
             var jwtToken = tokenHandler.ReadToken(token.Replace("\"", string.Empty)) as JwtSecurityToken;
-            var claim = jwtToken.Claims.FirstOrDefault(x => x.Type == "unique_name");
+            var claim = jwtToken.Claims.FirstOrDefault(x => x.Type == UserIdentityConstant.UNIQUE_NAME);
             if (claim != null) return claim.Value;
 
             return null;
         }
 
-        public bool VerifyToken(string token)
+        public UserIdentity GetUserInfoByToken(string token)
         {
-            if (string.IsNullOrWhiteSpace(token)) return false;
+            UserIdentity userIdentity = new UserIdentity();
+            if (string.IsNullOrWhiteSpace(token)) return null;
+            var jwtToken = tokenHandler.ReadToken(token.Replace("\"", string.Empty)) as JwtSecurityToken;
+            var claimUserName = jwtToken.Claims.FirstOrDefault(x => x.Type == UserIdentityConstant.UNIQUE_NAME);
+            if (claimUserName != null) userIdentity.Username = claimUserName.ToString();
+            var claimFullName = jwtToken.Claims.FirstOrDefault(x => x.Type == UserIdentityConstant.FULL_NAME);
+            if (claimFullName != null) userIdentity.FullName = claimFullName.ToString();
+            var claimEmail = jwtToken.Claims.FirstOrDefault(x => x.Type == UserIdentityConstant.EMAIL);
+            if (claimEmail != null) userIdentity.Email = claimEmail.ToString();
+
+            return userIdentity;
+        }
+
+        public string VerifyToken(string token )
+        {
+            if (string.IsNullOrWhiteSpace(token)) return null;
 
             SecurityToken securityToken;
 
@@ -143,17 +167,18 @@ namespace WebAPI.Auth
                     ClockSkew = TimeSpan.Zero
                 },
                 out securityToken);
+                var jwtToken = (JwtSecurityToken)securityToken;
+                var username = jwtToken.Claims.First(x => x.Type == UserIdentityConstant.UNIQUE_NAME).Value;
+                return username;
             }
             catch (SecurityTokenException)
             {
-                return false;
+                return null;
             }
             catch (Exception)
             {
                 throw;
             }
-
-            return securityToken != null;
         }
     }
 }

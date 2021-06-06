@@ -38,6 +38,15 @@
     confirm: Confirm
     ok: Ok
     next: Next
+    sign_out: Log out
+  button: 
+    save: Save Change
+    edit: Edit
+    add_new: Add New
+    delete: Delete
+    cancel: Cancel
+    ok: Ok
+    back: Back
   error_page:
     error_500: 500 Error Page
     system_error: System error
@@ -75,7 +84,6 @@
     pw_not_match: The new password and confirmation password do not match.
     pw_not_hard: Entering new password as least one lower one upper one number character
     pw_incorrect: Password is incorrect
-    change_pw: Change Password
     pw_reset_success: Password reset successful
     not_exist: Not existed
     resset_paword: Resset paword
@@ -98,6 +106,7 @@
     phone_maximum: Phone number has maximum of 12 digits
     select_one_more_project: Select one or more project
     fullname_maximum: Maximum length is 30
+    login_fail: Login failed, please contact admin
   home: 
     contact: contact form
     email: Email
@@ -186,12 +195,14 @@
     perform_success: Performing successfully
     unlock_success: Group(s) is unlocked successfully
     locked_success: Group(s) is locked successfully
-  permission_detail: 
+  permission: 
     home: Home
     permission_management: Permission Management
     add_permission: Add permission
     no_: No.
     permission_name: Permission name
+    group_mngt: Group mamagement
+    action: Action
     active: Active
     save: Save
     lock: Lock
@@ -202,7 +213,6 @@
     enter_permission_name: Enter permission name
     required_permission_name: Please enter permission name
     permission_name_exist: The permission already exixts.
-
     perform_success: Performing successfully
     unlock_success: Unlocked successfully
     locked_success: Locked successfully
