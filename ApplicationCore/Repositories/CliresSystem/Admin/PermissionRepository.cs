@@ -33,26 +33,48 @@ namespace ApplicationCore.Repositories.CiresSystem
 
         public async Task<IEnumerable<Permission>> GetPermissionList()
         {
-            IEnumerable<TblPermission> items = await dbContext.TblPermissions.ToListAsync();
-            IEnumerable<Permission> perms = (from u in items select new Permission(u));
-            return perms;
+            try
+            {
+                IEnumerable<TblPermission> items = await dbContext.TblPermissions.ToListAsync();
+                IEnumerable<Permission> perms = (from u in items select new Permission(u));
+                return perms;
+            }
+            catch
+            {
+                return null;
+            }
+
         }
 
-        public async Task<TblPermission> GetPermByID(string permId)
+        public async Task<Permission> GetPermByID(string permId)
         {
-            TblPermission item = await dbContext.TblPermissions.Where(x => x.PermId == permId).FirstOrDefaultAsync();
-            //Permission perm = new Permission(item);
-            return item;
+            try
+            {
+                TblPermission item = await dbContext.TblPermissions.Where(x => x.PermId == permId).FirstOrDefaultAsync();
+                Permission perm = Convert2Model(item);
+                return perm;
+            }
+            catch
+            {
+                return null;
+            }
+
         }
 
         public async Task<string> CreatePermission(Permission permission)
         {
-            TblPermission perm = new TblPermission();
-            perm = Convert2Entity(perm, permission);
-            dbContext.TblPermissions.Add(perm);
-            await dbContext.SaveChangesAsync();
-            return perm.PermId;
-
+            try
+            {
+                TblPermission perm = new TblPermission();
+                perm = Convert2Entity(perm, permission);
+                dbContext.TblPermissions.Add(perm);
+                await dbContext.SaveChangesAsync();
+                return perm.PermId;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<int> UpdatePermission(string PermID, Permission permission)
@@ -65,6 +87,24 @@ namespace ApplicationCore.Repositories.CiresSystem
                 perm = Convert2Entity(perm, permission);
                 dbContext.Entry(perm).State = EntityState.Modified;
 
+                await dbContext.SaveChangesAsync();
+                return DBStatus.SUCCESS;
+            }
+            catch
+            {
+                return DBStatus.FAIL;
+            }
+
+        }
+
+        public async Task<int> DeletePermission(string permId)
+        {
+            try
+            {
+                TblPermission item = await dbContext.TblPermissions.FindAsync(permId);
+                if (item == null)
+                    return DBStatus.NOT_FOUND;
+                dbContext.RemoveRange(item);
                 await dbContext.SaveChangesAsync();
                 return DBStatus.SUCCESS;
             }

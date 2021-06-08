@@ -69,6 +69,8 @@
 
 @code
 {
+    [Parameter]
+    public string TypeMenu { get; set; }
     public IEnumerable<MainMenu> menuList;
 
     protected override async Task OnInitializedAsync()

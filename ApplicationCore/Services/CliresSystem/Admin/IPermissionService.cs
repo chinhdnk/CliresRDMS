@@ -8,7 +8,7 @@ namespace ApplicationCore.Services.CliresSystem
     public interface IPermissionService
     {
         Task<string> CreatePermAsync(Permission permission);
-        Task DeleteAsync(int id);
+        Task DeletePermAsync(int id);
         Task UpdatePermAsync(Permission permission);
         Task<TblPermission> ViewPermById(int id);
         Task<IEnumerable<Permission>> ViewPermissionAsync();

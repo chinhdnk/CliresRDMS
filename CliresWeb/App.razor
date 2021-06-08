@@ -5,7 +5,14 @@
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
             <NotAuthorized>
-                <Login></Login>
+                @if (!context.User.Identity.IsAuthenticated)
+                {
+                    <Login></Login>
+                }
+                else
+                {
+                    <ErrorComponent errorCode="401" errorMessage=@languageContainer.Keys["error_page:unauthorized"]></ErrorComponent>
+                }
             </NotAuthorized>
         </AuthorizeRouteView>
     </Found>
@@ -13,7 +20,8 @@
         <CascadingAuthenticationState>
             <LayoutView Layout="@typeof(MainLayout)">
                 <!-- Main content -->
-                <section class="content">
+                <ErrorComponent errorCode="404" errorMessage=@languageContainer.Keys["error_page:error_404"]></ErrorComponent>
+                <!--<section class="content">
                     <div class="error-page">
                         <h2 class="headline text-warning"> 404</h2>
                         <div class="error-content">
@@ -21,11 +29,11 @@
                             <p>
                                 @languageContainer.Keys["error_page:error_404_msg"]
                             </p>
-                        </div>
+                        </div>-->
                         <!-- /.error-content -->
-                    </div>
+                    <!--</div>-->
                     <!-- /.error-page -->
-                </section>
+                <!--</section>-->
                 <!-- /.content -->
             </LayoutView>
         </CascadingAuthenticationState>

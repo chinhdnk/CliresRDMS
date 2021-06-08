@@ -20,17 +20,7 @@ namespace ApplicationCore.Services.Account
             this.tokenRepository = tokenRepository;
         }
 
-        public async Task<string> LoginAsync(string userName, string password)
-        {
-            var token = await this.webApiExecuter.InvokePostReturnString("authenticate", new { userName = userName, password = password });
-            if (string.IsNullOrWhiteSpace(token) || token == "\"\"")
-                return null;
-
-            await tokenRepository.SetToken(token);
-            return token;
-        }
-
-        public async Task<AuthenticateResponse> LoginAsync2(string userName, string password)
+        public async Task<AuthenticateResponse> LoginAsync(string userName, string password)
         {
             AuthenticateResponse authenticateResponse = await this.webApiExecuter.InvokeLoginPost<AuthenticateResponse>("login", new AuthenticateRequest { UserName = userName, Password = password });
             if (!string.IsNullOrWhiteSpace(authenticateResponse.Token) || authenticateResponse.Token != "\"\"")

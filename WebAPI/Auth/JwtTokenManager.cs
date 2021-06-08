@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BC = BCrypt.Net.BCrypt;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebAPI.Auth
 {
@@ -33,50 +34,12 @@ namespace WebAPI.Auth
             secrectKey = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]);
         }
 
-        public string Authenticate(string userName, string password)
-        {
-            TblAccount item = dbContext.TblAccounts.Find(userName);
-            //validate the credentials              
-            if (!string.IsNullOrWhiteSpace(userName) && !BC.Verify(password, item.Password))
-                return string.Empty;
-            else
-            {
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Name, userName));
-                claims.Add(new Claim(UserIdentityConstant.FULL_NAME, item.FullName));
-                claims.Add(new Claim(ClaimTypes.Email, item.Email));
-                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, configuration["Jwt:Subject"]));
-                claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-                claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()));
-
-                //chinh add role admin for tom
-                if (userName == "lalala")
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, "admin"));
-                }
-
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.UtcNow.AddMinutes(30),
-                    SigningCredentials = new SigningCredentials(
-                            new SymmetricSecurityKey(secrectKey),
-                            SecurityAlgorithms.HmacSha256Signature
-                        )
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                return tokenHandler.WriteToken(token);
-            }
-        }
-
-        public AuthenticateResponse Authenticate2(string userName, string password)
+        public AuthenticateResponse Authenticate(string userName, string password)
         {
             AuthenticateResponse authenticateResponse = new AuthenticateResponse();
             try
             {
                 TblAccount account = dbContext.TblAccounts.Find(userName);
-                //IEnumerable<string> listPerms= dbContext.TblUserGroups
                 if (account == null || !BC.Verify(account.Salt + password, account.Password))
                 {
                     authenticateResponse.KeyMsg = "username_pw_incorrect";
@@ -93,7 +56,6 @@ namespace WebAPI.Auth
                     claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
                     claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()));
 
-                    //claims.Add(new Claim(ClaimTypes.Role, "admin"));
                     foreach (var perm in listPerm)
                     {
                         claims.Add(new Claim(ClaimTypes.Role, perm));

@@ -1,8 +1,12 @@
 ﻿using Infrastructure.Constant;
 using Infrastructure.Models;
+using Microsoft.AspNetCore.Components;
+using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ApplicationCore.Repositories.ApiClient
@@ -12,7 +16,6 @@ namespace ApplicationCore.Repositories.ApiClient
         private readonly string baseUrl;
         private readonly HttpClient httpClient;
         private readonly ITokenRepository tokenRepository;
-
         public WebApiExecuter(string baseUrl, HttpClient httpClient, ITokenRepository tokenRepository)
         {
             this.baseUrl = baseUrl;
@@ -26,7 +29,10 @@ namespace ApplicationCore.Repositories.ApiClient
         public async Task<T> InvokeGet<T>(string uri)
         {
             await AddTokenHeader();
-            return await httpClient.GetFromJsonAsync<T>(GetUrl(uri));
+            var response = await httpClient.GetAsync(GetUrl(uri));
+            await HandleError(response);
+            var content = await response.Content.ReadFromJsonAsync<T>();
+            return content;
         }
 
         public async Task<T> InvokePost<T>(string uri, T obj)
@@ -63,16 +69,19 @@ namespace ApplicationCore.Repositories.ApiClient
             await HandleError(response);
         }
 
-        public async Task InvokeDelete(string uri)
+        public async Task<bool> InvokeDelete(string uri)
         {
             await AddTokenHeader();
             var response = await httpClient.DeleteAsync(GetUrl(uri));
             await HandleError(response);
+            return true;
         }
         private async Task HandleError(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
+                var statuscode = response.StatusCode;
+                //navManager.NavigateTo("/error" + "/" + statuscode);
                 var error = await response.Content.ReadAsStringAsync();
                 throw new HttpRequestException(error);
             }

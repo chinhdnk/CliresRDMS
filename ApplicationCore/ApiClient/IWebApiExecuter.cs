@@ -5,7 +5,7 @@ namespace ApplicationCore.Repositories.ApiClient
 {
     public interface IWebApiExecuter
     {
-        Task InvokeDelete(string uri);
+        Task<bool> InvokeDelete(string uri);
         Task<T> InvokeGet<T>(string uri);
         Task<T> InvokeLoginPost<T>(string uri, AuthenticateRequest obj);
         Task<T> InvokePost<T>(string uri, T obj);

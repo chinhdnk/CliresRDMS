@@ -1,0 +1,104 @@
+﻿@page "/cliressystem/admin/group/{groupId:int}"
+
+@inject NavigationManager navigationManager
+@inject IGroupService groupService
+@inject ILanguageContainerService languageContainer
+@inject IJSRuntime JSRuntime
+
+@attribute [Authorize(Roles = "GROUP_EDIT")]
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Group Edit</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Administration</a></li>
+                    <li class="breadcrumb-item active">Group</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Group information</h3>
+                </div>
+                <div class="card-body">
+                    <AlertComponent @ref="alertComponent"></AlertComponent>
+                    @if (group != null)
+                    {
+
+                        <EditForm Model="group" OnValidSubmit="Save">
+                            <div class="form-group">
+                                <label for="inputName">Group Name</label>
+                                <InputText type="text" id="inputName" @bind-Value="group.GroupName" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="inputStatus">@languageContainer.Keys["common:status"]</label>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" @bind="group.Status">
+                                    <label class="form-check-label" for="status">@languageContainer.Keys["common:active"]</label>
+                                </div>
+                            </div>
+                        </EditForm>
+                    }
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <NavLink href="@($"/cliressystem/admin/group")" class="btn btn-secondary">Cancel</NavLink>
+            <button class="btn btn-success float-right" @onclick="Save">@languageContainer.Keys["common:save"]</button>
+        </div>
+    </div>
+</section>
+<!-- /.content -->
+
+@code {
+    Group group;
+    AlertComponent alertComponent;
+
+    [Parameter]
+    public int groupId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        group = await groupService.ViewGroupById(groupId);
+        languageContainer.InitLocalizedComponent(this);
+    }
+
+
+    async Task Save()
+    {
+        bool bSuccess = true;
+
+        if (string.IsNullOrWhiteSpace(group.GroupName))
+        {
+            alertComponent.ErrorMessage = "Group name is required";
+            alertComponent.Show();
+            bSuccess = false;
+        }
+
+        if (bSuccess)
+        {
+            await groupService.UpdateGroupAsync(group);
+
+            await JSRuntime.InvokeVoidAsync("Toast.fire", "info", "Save change success");
+            navigationManager.NavigateTo($"/cliresystem/admin/group");
+        }
+    }
+
+}
+

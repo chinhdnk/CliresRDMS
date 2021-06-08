@@ -17,6 +17,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using WebAPI.Extensions;
+using Infrastructure.Services;
+using NLog;
+using System.IO;
 
 namespace WebAPI
 {
@@ -26,6 +31,7 @@ namespace WebAPI
         public IConfiguration configuration { get; set; }
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             this.env = env;
             this.configuration = configuration;
         }
@@ -48,8 +54,6 @@ namespace WebAPI
             var sqlConnectionConfig = new SqlConnectionConfiguration(configuration.GetConnectionString("ProjectDB"));
             services.AddSingleton(sqlConnectionConfig);
 
-            services.AddControllers();
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
             {
                 option.RequireHttpsMetadata = false;
@@ -57,9 +61,9 @@ namespace WebAPI
                 option.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,
-                    ValidAudience= configuration["Jwt:Audience"],
-                    ValidIssuer= configuration["Jwt:Issuer"],
-                    IssuerSigningKey= new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"]))
+                    ValidAudience = configuration["Jwt:Audience"],
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"]))
                 };
             });
 
@@ -67,7 +71,10 @@ namespace WebAPI
             services.AddTransient<IMenuRepository, MenuRepository>();
             services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<IPermissionRepository, PermissionRepository>();
+            services.AddTransient<IGroupRepository, GroupRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+
+            services.AddSingleton<ILoggerManager, LoggerManager>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddApiVersioning(options =>
@@ -85,17 +92,16 @@ namespace WebAPI
             });
 
             services.AddCors(options => {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.WithOrigins("https://localhost:44323") //CliresWeb
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-                });
+                options.AddPolicy("CorsPolicy", opt => opt
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
             });
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
             if (env.IsDevelopment())
             {
@@ -108,10 +114,14 @@ namespace WebAPI
                             options.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1");
                         });
             }
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
 
-            loggerFactory.AddFile(configuration["LogFile"]);
-
-            app.UseCors();
+            //loggerFactory.AddFile(configuration["LogFile"]);
+            app.ConfigureCustomExceptionMiddleware();
+            app.UseCors("CorsPolicy");
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

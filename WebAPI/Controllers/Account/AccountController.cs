@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Filters;
 using WebAPI.Auth;
+using Infrastructure.Services;
 
 namespace WebAPI.Controllers.Account
 {
@@ -19,11 +20,11 @@ namespace WebAPI.Controllers.Account
     [JwtAuthorize]
     public class AccountController : ControllerBase
     {
-        private readonly ILogger logger;
+        private readonly ILoggerManager logger;
         private readonly CliresSystemDBContext dbContext;
         private readonly IAccountRepository accountRepository;
         private readonly IJwtTokenManager jwtTokenManager;
-        public AccountController(CliresSystemDBContext dbContext, IAccountRepository accountRepository, IJwtTokenManager jwtTokenManager, ILogger<AccountController> logger)
+        public AccountController(CliresSystemDBContext dbContext, IAccountRepository accountRepository, IJwtTokenManager jwtTokenManager, ILoggerManager logger)
         {
             this.dbContext = dbContext;
             this.accountRepository = accountRepository;
@@ -35,19 +36,11 @@ namespace WebAPI.Controllers.Account
         [Route("/changepassword")]
         public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
         {
-            try
-            {
-                model.Username = jwtTokenManager.GetUserNameByToken(Request.Headers[UserIdentityConstant.TOKEN_HEADER]);
-                string result = await accountRepository.ChangePassword(model);
-                logger.LogInformation($"{model.Username} change password success");
-                return Ok(result);            
-            }
-            catch(Exception)
-            {
-                logger.LogError($"{model.Username} change password failed");
-                return BadRequest();
-            }
-
+            logger.LogInfo($"{model.Username} request to change password");
+            model.Username = jwtTokenManager.GetUserNameByToken(Request.Headers[UserIdentityConstant.TOKEN_HEADER]);
+            string result = await accountRepository.ChangePassword(model);
+            logger.LogInfo($"{model.Username} change password success");
+            return Ok(result);
         }
     }
 }

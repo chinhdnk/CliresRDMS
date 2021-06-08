@@ -38,10 +38,10 @@
                                     <tr>
                                         <th>#</th>
                                         <th>@languageContainer.Keys["permission:permission_name"]</th>
-                                        <th>@languageContainer.Keys["permission:status"]</th>
-                                        <th>@languageContainer.Keys["permission:created_by"]</th>
-                                        <th>@languageContainer.Keys["permission:created_date"]</th>
-                                        <th>@languageContainer.Keys["permission:action"]</th>
+                                        <th>@languageContainer.Keys["common:status"]</th>
+                                        <th>@languageContainer.Keys["common:created_by"]</th>
+                                        <th>@languageContainer.Keys["common:created_date"]</th>
+                                        <th>@languageContainer.Keys["common:action"]</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,14 +65,12 @@
                                         </td>
                                         <td>
                                             <AuthorizeView Roles="PERMISSION_EDIT">
-                                                <NavLink href="@($"/permission/{perm.PermissionID}")">
-                                                    @languageContainer.Keys["button:edit"]
+                                                <NavLink href="@($"/permission/{perm.PermissionID}")" class="btn btn-info btn-xs">
+                                                    @languageContainer.Keys["common:edit"]
                                                 </NavLink>
                                             </AuthorizeView>
                                             <AuthorizeView Roles="PERMISSION_DELETE">
-                                                <NavLink href="@($"/permission/delete")">
-                                                    @languageContainer.Keys["button:delete"]
-                                                </NavLink>
+                                                <button type="button" class="btn btn-danger btn-xs">@languageContainer.Keys["common:delete"]</button>
                                             </AuthorizeView>
                                         </td>
                                     </tr>

@@ -10,21 +10,10 @@ namespace WebAPI.Controllers.Auth
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly ILogger logger;
         private readonly IJwtTokenManager jwtTokenManager;
-        public AuthController(IJwtTokenManager jwtTokenManager, ILogger<AuthController> logger)
+        public AuthController(IJwtTokenManager jwtTokenManager)
         {
             this.jwtTokenManager = jwtTokenManager;
-            this.logger = logger;
-        }
-
-        [HttpPost]
-        [Route("/authenticate")]
-        public Task<string> Authenticate(AuthenticateRequest userCredential)
-        {
-            string token = jwtTokenManager.Authenticate(userCredential.UserName, userCredential.Password);
-            logger.LogInformation($"{userCredential.UserName} authenticate success");
-            return Task.FromResult(token);
         }
 
         [HttpGet]
@@ -42,11 +31,10 @@ namespace WebAPI.Controllers.Auth
         }
 
         [HttpPost]
-        [Route("/login")]
-        public IActionResult Login(AuthenticateRequest userCredential)
+        [Route("/authenticate")]
+        public IActionResult Authenticate(AuthenticateRequest userCredential)
         {
-            AuthenticateResponse authenticateResponse = jwtTokenManager.Authenticate2(userCredential.UserName, userCredential.Password);
-            logger.LogInformation($"{userCredential.UserName} login success");
+            AuthenticateResponse authenticateResponse = jwtTokenManager.Authenticate(userCredential.UserName, userCredential.Password);
             return Ok(authenticateResponse);
         }
     }

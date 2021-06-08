@@ -6,6 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Filters;
 using Infrastructure.Models.CliresSystem;
+using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace WebAPI.Controllers.CliresSystem
 {
@@ -17,15 +20,20 @@ namespace WebAPI.Controllers.CliresSystem
     {
         private readonly IPermissionRepository permissionRepository;
         private readonly CliresSystemDBContext dbContext;
-        public PermissionController(IPermissionRepository permissionRepository, CliresSystemDBContext db)
+        private readonly ILoggerManager logger;
+        public PermissionController(IPermissionRepository permissionRepository, CliresSystemDBContext dbContext, ILoggerManager logger)
         {
             this.permissionRepository = permissionRepository;
-            this.dbContext = db;
+            this.dbContext = dbContext;
+            this.logger = logger;
         }
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await permissionRepository.GetPermissionList());
+            logger.LogInfo($"fetching all permission from the storage");
+            var permList = await permissionRepository.GetPermissionList();
+            logger.LogInfo($"Returning {permList.Count()} permission");
+            return Ok(permList);
         }
 
         [HttpGet("{id}")]
@@ -37,22 +45,16 @@ namespace WebAPI.Controllers.CliresSystem
             return Ok(item);
         }
 
-        //[HttpPost]
-        //[JwtAuthorize("PERMISSION_CREATE")]
-        //public async Task<IActionResult> Post([FromBody] Permission permission)
-        //{
-        //    int permId = await permissionRepository.CreatePermission(permission);
-        //    permission.PermissionID = permId;
-
-        //    return CreatedAtAction(nameof(GetById),
-        //            new { id = permId },
-        //            permission
-        //        );
-        //}
-
+        [HttpPost]
+        public async Task<IActionResult> Post(Permission perm)
+        {
+            string permId = await permissionRepository.CreatePermission(perm);
+            if (permId == null)
+                return NotFound();
+            return Ok(permId);
+        }
 
         [HttpPut("{permId}")]
-        [JwtAuthorize("PERMISSION_EDIT")]
         public async Task<IActionResult> Put(string permId, Permission permission)
         {
             if (permId != permission.PermissionID) return BadRequest();

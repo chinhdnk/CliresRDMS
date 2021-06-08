@@ -34,12 +34,8 @@
     password_minlength: Your password must be at least 8 characters long
     sys_msg: System Messages
     cfrm_rest_pass: Confirm that you wish to reset password
-    cancel: Cancel
-    confirm: Confirm
-    ok: Ok
-    next: Next
     sign_out: Log out
-  button: 
+  common: 
     save: Save Change
     edit: Edit
     add_new: Add New
@@ -47,12 +43,24 @@
     cancel: Cancel
     ok: Ok
     back: Back
+    confirm: Confirm
+    next: Next
+    status: Status
+    active: Active
+    action: Action
+    no_: No.
+    created_date: Created Date
+    created_by: Created By
+    modified_date: Modified Date
+    modified_by: Modified By
   error_page:
+    title: Error Information
     error_500: 500 Error Page
     system_error: System error
     system_error_msg: System error message
     error_404: Oops! Page not found.
     error_404_msg: We could not find the page you were looking for.
+    unauthorized: You are not authorized to access this resource.
   login: 
     login_msg: Sign in to start your session
     username: Username
@@ -68,10 +76,6 @@
     account_expired: Account is expired. Update the expired date.
     username_pw_incorrect: Username or password is incorrect
     login_success: Login success
-    lang: Language
-    en: English
-    vn: Vietnam
-    ok: Ok
     username_required: Username is required
     email_required: Email is required
     email_invalid: Email address is invalid
@@ -107,6 +111,7 @@
     select_one_more_project: Select one or more project
     fullname_maximum: Maximum length is 30
     login_fail: Login failed, please contact admin
+    not_member: Not a member?
   home: 
     contact: contact form
     email: Email
@@ -129,7 +134,6 @@
     user_mgn: User Management
     title: User Detail
     lock: Lock
-    active: Active
     reset_pw: Reset Password
     extend: Extend
     approve: Approve and Save
@@ -144,7 +148,6 @@
     office_number: Expired Number
     phone_number: Phone Number
     country: Contry
-    status: Status
     profile_image: Profile Image
     esignature: E_Signature
     perm_list: Permission List
@@ -171,27 +174,16 @@
     user_name: User Name
     full_name: Full Name
     email: Email
-    status: Status
-  group_detail: 
+  group: 
     home: Home
-    permission_management: Permission Management
-    add_permission: Add permission
-    no_: No.
-    permission_name: Permission name
-    title: Group Detail
-    group_mngt: Group Management
-    active: Active
-    save: Save
-    lock: Lock
-    group_name: Group Name
-    description: Discription
-    status: Status
-    enter_group_name: Enter group name
-    required_group_name: Input a group name
-    group_name_exist: The group already exists.
-    group_managerment: Group Management
+    group_management: Group Management
     add_group: Add group
-    created_date: Created date
+    no_: No.
+    group_name: Group Name
+    title: Group Detail
+    lock: Lock
+    required_group_name: Please input a group name
+    group_name_exist: The group already exists.
     perform_success: Performing successfully
     unlock_success: Group(s) is unlocked successfully
     locked_success: Group(s) is locked successfully
@@ -202,14 +194,8 @@
     no_: No.
     permission_name: Permission name
     group_mngt: Group mamagement
-    action: Action
-    active: Active
-    save: Save
     lock: Lock
     description: Description
-    status: Status
-    created_by: Created by
-    created_date: Created date
     enter_permission_name: Enter permission name
     required_permission_name: Please enter permission name
     permission_name_exist: The permission already exixts.

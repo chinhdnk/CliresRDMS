@@ -16,7 +16,8 @@ namespace ApplicationCore.Services.CliresSystem
 
         public async Task<IEnumerable<Permission>> ViewPermissionAsync()
         {
-            return await webApiExecuter.InvokeGet<IEnumerable<Permission>>("api/cliressystem/permission");
+            var response = await webApiExecuter.InvokeGet<IEnumerable<Permission>>("api/cliressystem/permission");
+            return response;
         }
         public async Task<TblPermission> ViewPermById(int id)
         {
@@ -32,7 +33,7 @@ namespace ApplicationCore.Services.CliresSystem
             await webApiExecuter.InvokePut($"api/permission/{permission.PermissionID}", permission);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeletePermAsync(int id)
         {
             await webApiExecuter.InvokeDelete($"api/permission/{id}");
         }

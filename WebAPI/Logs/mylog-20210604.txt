@@ -1,4 +1,0 @@
-2021-06-04T20:57:28.2549015+07:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
-2021-06-04T20:57:28.2626605+07:00  [INF] Hosting environment: "Development" (c3307c92)
-2021-06-04T20:57:28.2642043+07:00  [INF] Content root path: "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\WebAPI" (b5d60022)
-2021-06-04T20:57:52.4031341+07:00 80000002-0000-e000-b63f-84710c7967bb [INF] admin login success (3622c2fa)

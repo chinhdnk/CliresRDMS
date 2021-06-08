@@ -18,6 +18,7 @@ namespace CliresWeb.Services
             //Clires system services
             services.AddTransient<IPermissionService, PermissionService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IGroupService, GroupService>();
             services.AddTransient<IMenuService, MenuService>();
 
             return services;
