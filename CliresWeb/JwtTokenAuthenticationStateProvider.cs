@@ -1,12 +1,11 @@
 ﻿using Infrastructure.Constant;
 using Microsoft.AspNetCore.Components.Authorization;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using ApplicationCore.Repositories;
+using ApplicationCore.Repositories.Account;
 
 namespace CliresWeb
 {
@@ -33,8 +32,8 @@ namespace CliresWeb
                     var claims = new List<Claim>();
                     claims.AddRange(tokenJwt.Claims);
 
-                    var nameClaim = tokenJwt.Claims.FirstOrDefault(x => x.Type == "unique_name");
-                    var roleClaims = tokenJwt.Claims.Where(x => x.Type == "role");
+                    var nameClaim = tokenJwt.Claims.FirstOrDefault(x => x.Type == UserIdentityConstant.UNIQUE_NAME);
+                    var roleClaims = tokenJwt.Claims.Where(x => x.Type == UserIdentityConstant.ROLE);
                     if (nameClaim != null) claims.Add(new Claim(ClaimTypes.Name, nameClaim.Value));
                     if (roleClaims != null)
                     {
@@ -44,7 +43,7 @@ namespace CliresWeb
                         }
                     }
 
-                    var identity = new ClaimsIdentity(claims, "Token Auth");
+                    var identity = new ClaimsIdentity(claims, UserIdentityConstant.TOKEN_AUTH);
                     var principal = new ClaimsPrincipal(identity);
 
                     return new AuthenticationState(principal);

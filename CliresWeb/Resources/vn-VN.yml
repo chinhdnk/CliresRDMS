@@ -35,7 +35,7 @@
     sys_msg: Thông Báo Hệ Thống
     cfrm_rest_pass: Vui lòng xác nhận bạn muốn đặt lại mạt khẩu.
     sign_out: Thoát
-  common: 
+  button:
     save: Lưu
     edit: Sửa
     add_new: Thêm mới
@@ -45,6 +45,7 @@
     back: Quay lại
     confirm: Xác nhận
     next: Tiếp theo
+  label_common:
     status: Trạng thái
     action: Hành động
     active: Kích hoạt
@@ -61,6 +62,11 @@
     error_404: Oops! Không tìm thấy trang.
     error_404_msg: Chúng tôi không tìm được trang mà bạn đang tìm kiếm.
     unauthorized: Bạn không có quyền truy cập chức năng này.
+  dialog:
+    delete_title: Xác nhận xóa
+    delete_message: Bạn chắc chắn muốn xóa {item}?
+    delete_error: Xóa thất bại
+    delete_success: Xóa thành công 
   login: 
     login_msg: Đăng nhập để bắt đầu làm việc
     username: Tên đăng nhập

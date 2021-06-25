@@ -111,15 +111,15 @@
                 var authenticateResponse = await accountService.LoginAsync(userViewModel.UserName, userViewModel.Password);
                 if (string.IsNullOrWhiteSpace(authenticateResponse.Token))
                 {
-                    alertComponent.ErrorMessage = languageContainer.Keys[$"login:{authenticateResponse.KeyMsg}"];
+                    alertComponent.Message = languageContainer.Keys[$"login:{authenticateResponse.KeyMsg}"];
                     alertComponent.Show();
                 }
                 else
-                    navigationManager.NavigateTo("/useridentity", true);
+                    navigationManager.NavigateTo("/home", true);
             }
             else
             {
-                alertComponent.ErrorMessage = errorMsg.ToString();
+                alertComponent.Message = errorMsg.ToString();
                 alertComponent.Show();
             }
         }

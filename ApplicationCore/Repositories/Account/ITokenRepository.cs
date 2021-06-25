@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ApplicationCore.Repositories
+namespace ApplicationCore.Repositories.Account
 {
     public interface ITokenRepository
     {

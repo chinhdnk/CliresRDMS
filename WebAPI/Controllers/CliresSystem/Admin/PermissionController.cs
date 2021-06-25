@@ -1,14 +1,10 @@
-﻿using Infrastructure.Entities.CliresSystem;
-using ApplicationCore.Repositories.CiresSystem;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Filters;
 using Infrastructure.Models.CliresSystem;
 using Infrastructure.Services;
-using Microsoft.Extensions.Logging;
-using System;
+using ApplicationCore.Repositories.CliresSystem;
 
 namespace WebAPI.Controllers.CliresSystem
 {
@@ -19,14 +15,13 @@ namespace WebAPI.Controllers.CliresSystem
     public class PermissionController : ControllerBase
     {
         private readonly IPermissionRepository permissionRepository;
-        private readonly CliresSystemDBContext dbContext;
         private readonly ILoggerManager logger;
-        public PermissionController(IPermissionRepository permissionRepository, CliresSystemDBContext dbContext, ILoggerManager logger)
+        public PermissionController(IPermissionRepository permissionRepository, ILoggerManager logger)
         {
             this.permissionRepository = permissionRepository;
-            this.dbContext = dbContext;
             this.logger = logger;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -36,14 +31,6 @@ namespace WebAPI.Controllers.CliresSystem
             return Ok(permList);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
-        {
-            TblPermission item = await dbContext.TblPermissions.Where(x => x.PermId == id).FirstOrDefaultAsync();
-            if (item == null)
-                return NotFound();
-            return Ok(item);
-        }
 
         [HttpPost]
         public async Task<IActionResult> Post(Permission perm)

@@ -17,6 +17,7 @@ namespace Infrastructure.Constant
     public class UserIdentityConstant
     {
         public const string TOKEN_HEADER = "TokenHeader";
+        public const string TOKEN_AUTH = "Token Authentication";
         public const string USERNAME = "Username";
         public const string FULL_NAME = "FullName";
         public const string EMAIL = "Email";

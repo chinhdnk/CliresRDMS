@@ -14,12 +14,13 @@
 
 @code
 {
-    private string currLanguage { get; set; } 
+    private string currLanguage { get; set; }
     void SetLanguage(ChangeEventArgs e)
     {
         var culture = (string)e.Value;
         languageContainer.SetLanguage(System.Globalization.CultureInfo.GetCultureInfo(culture));
         CreateCookie("language", culture, 7);
+        Task.Delay(3000);
     }
 
     protected override async Task OnInitializedAsync()

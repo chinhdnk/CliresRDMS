@@ -1,16 +1,9 @@
-﻿using Infrastructure.Entities.CliresSystem;
-using ApplicationCore.Repositories.CiresSystem;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApi.Filters;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using System.Linq;
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
 using WebAPI.Auth;
 using Infrastructure.Constant;
+using ApplicationCore.Repositories.CliresSystem;
 
 namespace WebAPI.Controllers.CliresSystem
 {

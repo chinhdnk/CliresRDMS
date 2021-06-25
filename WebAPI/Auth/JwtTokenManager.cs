@@ -1,8 +1,6 @@
 ﻿using Infrastructure.Constant;
 using Infrastructure.Entities.CliresSystem;
 using Infrastructure.Models;
-using ApplicationCore.Repositories.CiresSystem;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -11,9 +9,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using BC = BCrypt.Net.BCrypt;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using ApplicationCore.Repositories.CliresSystem;
 
 namespace WebAPI.Auth
 {
@@ -64,7 +61,7 @@ namespace WebAPI.Auth
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(claims),
-                        Expires = DateTime.UtcNow.AddMinutes(30),
+                        Expires = DateTime.UtcNow.AddDays(Int32.Parse(configuration["Jwt:ExpireDay"])),
                         SigningCredentials = new SigningCredentials(
                                 new SymmetricSecurityKey(secrectKey),
                                 SecurityAlgorithms.HmacSha256Signature

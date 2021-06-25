@@ -35,7 +35,7 @@
     sys_msg: System Messages
     cfrm_rest_pass: Confirm that you wish to reset password
     sign_out: Log out
-  common: 
+  button:
     save: Save Change
     edit: Edit
     add_new: Add New
@@ -45,6 +45,7 @@
     back: Back
     confirm: Confirm
     next: Next
+  label_common:
     status: Status
     active: Active
     action: Action
@@ -57,10 +58,15 @@
     title: Error Information
     error_500: 500 Error Page
     system_error: System error
-    system_error_msg: System error message
+    system_error_msg: Something went really wrong. Please contact administrator.
     error_404: Oops! Page not found.
     error_404_msg: We could not find the page you were looking for.
     unauthorized: You are not authorized to access this resource.
+  dialog:
+    delete_title: Confirm Delete
+    delete_message: Are you sure you want to delete {item}?
+    delete_error: Delete error 
+    delete_success: Item was successfully deleted 
   login: 
     login_msg: Sign in to start your session
     username: Username

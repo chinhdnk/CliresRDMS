@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Models.CliresSystem;
 using System.Collections.Generic;
 
-namespace ApplicationCore.Repositories.CiresSystem
+namespace ApplicationCore.Repositories.CliresSystem
 {
     public interface IMenuRepository
     {

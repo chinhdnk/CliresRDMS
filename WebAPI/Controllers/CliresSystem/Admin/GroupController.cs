@@ -71,5 +71,15 @@ namespace WebAPI.Controllers.CliresSystem.Admin
                 return NotFound();
             return Ok(group);
         }
+
+        [HttpDelete("{groupId}")]
+        public async Task<IActionResult> Delete(int groupId)
+        {
+            bool result = await groupRepository.DeleteGroup(groupId);
+            if (result)
+                return Ok();
+            else
+                return NotFound();
+        }
     }
 }

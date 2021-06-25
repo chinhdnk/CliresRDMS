@@ -9,19 +9,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
-using WebAPI.Auth;
-using ApplicationCore.Repositories.CiresSystem;
-using ApplicationCore.Repositories.CliresSystem;
 using Infrastructure.SqlDataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using WebAPI.Extensions;
-using Infrastructure.Services;
 using NLog;
 using System.IO;
+using Infrastructure.Entities.ProjectsDB;
+using WebAPI.Services;
 
 namespace WebAPI
 {
@@ -39,16 +35,29 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //*****************************************
+            //*************CLIRES_SYSTEM DATABASE**************
             //Run this scipt in PM to update entity from database at Infrastructure project
             //Scaffold-DbContext "Server=(local);Database=CLIRES_SYSTEM;User ID=sa;Password=HappyDay01;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities/CliresSystem -Context CliresSystemDBContext -Force
             //Remove OnConfiguring in CliresSystemDBContext
             //*****************************************
 
-            services.AddDbContext<CliresSystemDBContext>(c =>
-            c.UseSqlServer(configuration.GetConnectionString("CliresSystemDB")));
+            services.AddDbContext<CliresSystemDBContext>(c => c.UseSqlServer(configuration.GetConnectionString("CliresSystemDB")));
 
-            //*****************************************
+            //*************CLIRES_TEMPLATE DATABASE********************
+            //Run this scipt in PM to update entity from database at Infrastructure project
+            //Scaffold-DbContext "Server=(local);Database=Clires_Template;User ID=sa;Password=HappyDay01;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities/ProjectsDB -Context ProjectDBContext -Tables tblStudyCodes,tblCRFs,tblSites,tblFields -Force
+            //Remove OnConfiguring in ProjectDBContext
+            //******************************************
+            services.AddDbContext<ProjectDBContext>((serviceProvider, dbContextBuilder) =>
+            {
+                var connectionStringPlaceHolder = configuration.GetConnectionString("ProjectDB");
+                var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+                var dbName = httpContextAccessor.HttpContext.Request.Query["project"];
+                var connectionString = connectionStringPlaceHolder.Replace("{project_study}", dbName);
+                dbContextBuilder.UseSqlServer(connectionString);
+            });
+
+            //**************CRF TABLES******************
             //Configure to connect database by SqlConnection
             //*****************************************
             var sqlConnectionConfig = new SqlConnectionConfiguration(configuration.GetConnectionString("ProjectDB"));
@@ -67,15 +76,8 @@ namespace WebAPI
                 };
             });
 
-            services.AddTransient<IJwtTokenManager, JwtTokenManager>();
-            services.AddTransient<IMenuRepository, MenuRepository>();
-            services.AddTransient<IAccountRepository, AccountRepository>();
-            services.AddTransient<IPermissionRepository, PermissionRepository>();
-            services.AddTransient<IGroupRepository, GroupRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
-
-            services.AddSingleton<ILoggerManager, LoggerManager>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //Clires Repository service
+            services.AddRepositoryServices();
 
             services.AddApiVersioning(options =>
             {
@@ -119,8 +121,9 @@ namespace WebAPI
                 app.UseExceptionHandler("/error");
             }
 
-            //loggerFactory.AddFile(configuration["LogFile"]);
+            // handling error in middleware
             app.ConfigureCustomExceptionMiddleware();
+
             app.UseCors("CorsPolicy");
             app.UseRouting();
             app.UseAuthentication();

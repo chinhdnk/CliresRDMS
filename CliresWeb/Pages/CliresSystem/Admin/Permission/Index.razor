@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @inject IPermissionService PermissionService
 @inject ILanguageContainerService languageContainer
+@inject HttpInterceptorService Interceptor
 
 @attribute [Authorize(Roles = "PERMISSION_VIEW")]
     <!-- Content Header (Page header) -->
@@ -28,63 +29,60 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">DataTable with minimal features & hover style</h3>
+                        <AuthorizeView Roles="PERMISSION_CREATE">
+                            <button class="btn btn-primary" @onclick="AddPermission">@languageContainer.Keys["permission:add_permission"]</button>
+                        </AuthorizeView>
                     </div>
                     <div class="card-body">
                         @if (permission != null)
-                        {                          
+                        {
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>@languageContainer.Keys["permission:permission_name"]</th>
-                                        <th>@languageContainer.Keys["common:status"]</th>
-                                        <th>@languageContainer.Keys["common:created_by"]</th>
-                                        <th>@languageContainer.Keys["common:created_date"]</th>
-                                        <th>@languageContainer.Keys["common:action"]</th>
+                                        <th>@languageContainer.Keys["label_common:status"]</th>
+                                        <th>@languageContainer.Keys["label_common:created_by"]</th>
+                                        <th>@languageContainer.Keys["label_common:created_date"]</th>
+                                        <th>@languageContainer.Keys["label_common:action"]</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var perm in permission)
                                     {
-                                    <tr>
-                                        <td>@index</td>
-                                        <td>
-                                            <NavLink href="@($"/permission/{perm.PermissionID}")">
-                                                @perm.PermissionID
-                                            </NavLink>
-                                        </td>
-                                        <td>
-                                            @perm.Status
-                                        </td>
-                                        <td>
-                                            @perm.CreatedBy
-                                        </td>
-                                        <td>
-                                            @(perm.CreatedDate.ToString("yyyy-MM-dd"))
-                                        </td>
-                                        <td>
-                                            <AuthorizeView Roles="PERMISSION_EDIT">
-                                                <NavLink href="@($"/permission/{perm.PermissionID}")" class="btn btn-info btn-xs">
-                                                    @languageContainer.Keys["common:edit"]
+                                        <tr>
+                                            <td>@index</td>
+                                            <td>
+                                                <NavLink href="@($"/permission/{perm.PermissionID}")">
+                                                    @perm.PermissionID
                                                 </NavLink>
-                                            </AuthorizeView>
-                                            <AuthorizeView Roles="PERMISSION_DELETE">
-                                                <button type="button" class="btn btn-danger btn-xs">@languageContainer.Keys["common:delete"]</button>
-                                            </AuthorizeView>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                            <td>
+                                                @perm.Status
+                                            </td>
+                                            <td>
+                                                @perm.CreatedBy
+                                            </td>
+                                            <td>
+                                                @(perm.CreatedDate.ToString("yyyy-MM-dd"))
+                                            </td>
+                                            <td>
+                                                <AuthorizeView Roles="PERMISSION_EDIT">
+                                                    <NavLink href="@($"/permission/{perm.PermissionID}")" class="btn btn-info btn-xs">
+                                                        @languageContainer.Keys["button:edit"]
+                                                    </NavLink>
+                                                </AuthorizeView>
+                                                <AuthorizeView Roles="PERMISSION_DELETE">
+                                                    <button type="button" class="btn btn-danger btn-xs">@languageContainer.Keys["button:delete"]</button>
+                                                </AuthorizeView>
+                                            </td>
+                                        </tr>
 
                                     }
                                 </tbody>
                             </table>
                         }
 
-                    </div>
-                    <div class="card-footer">
-                        <AuthorizeView Roles="PERMISSION_CREATE">
-                            <button class="btn btn-primary" @onclick="AddPermission">Add Permission</button>
-                        </AuthorizeView>
                     </div>
                     <!-- /.col -->
                 </div>
@@ -95,13 +93,13 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-
 @code {
     IEnumerable<Permission> permission;
     int index = 1;
     protected override async Task OnInitializedAsync()
     {
         languageContainer.InitLocalizedComponent(this);
+        Interceptor.RegisterEvent();
         permission = await PermissionService.ViewPermissionAsync();
     }
 
@@ -109,6 +107,6 @@
     {
         NavigationManager.NavigateTo($"/cliressystem/admin/permission/addpemission");
     }
-
+    public void Dispose() => Interceptor.DisposeEvent();
 }
 

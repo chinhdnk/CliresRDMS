@@ -1,0 +1,34 @@
+2021-06-10 09:03:44.4045 INFO fetching all permission from the storage
+2021-06-10 09:03:44.5319 INFO Returning 22 permission
+2021-06-10 09:17:18.7794 INFO fetching all permission from the storage
+2021-06-10 09:17:18.8690 INFO Returning 22 permission
+2021-06-10 09:17:44.1710 INFO fetching all permission from the storage
+2021-06-10 09:17:44.1710 INFO Returning 22 permission
+2021-06-10 09:33:00.6537 INFO fetching all permission from the storage
+2021-06-10 09:33:00.7471 INFO Returning 22 permission
+2021-06-10 09:34:47.6272 INFO fetching all permission from the storage
+2021-06-10 09:34:47.7272 INFO Returning 22 permission
+2021-06-10 09:55:41.9868 INFO fetching all permission from the storage
+2021-06-10 09:55:42.0836 INFO Returning 22 permission
+2021-06-10 09:56:38.4592 INFO fetching all permission from the storage
+2021-06-10 09:56:38.4910 INFO Returning 22 permission
+2021-06-10 09:57:05.8703 INFO fetching all permission from the storage
+2021-06-10 09:57:05.8787 INFO Returning 22 permission
+2021-06-10 10:09:10.8481 INFO fetching all permission from the storage
+2021-06-10 10:09:10.9440 INFO Returning 22 permission
+2021-06-10 10:09:14.3191 INFO fetching all permission from the storage
+2021-06-10 10:09:14.3191 INFO Returning 22 permission
+2021-06-10 10:09:26.0583 INFO fetching all permission from the storage
+2021-06-10 10:09:26.0664 INFO Returning 22 permission
+2021-06-10 11:10:37.7184 INFO fetching all permission from the storage
+2021-06-10 11:10:37.8116 INFO Returning 22 permission
+2021-06-10 11:14:53.0060 INFO fetching all permission from the storage
+2021-06-10 11:14:53.0472 INFO Returning 24 permission
+2021-06-10 11:35:40.7014 INFO fetching all permission from the storage
+2021-06-10 11:35:40.8007 INFO Returning 24 permission
+2021-06-10 14:00:38.4996 INFO fetching all permission from the storage
+2021-06-10 14:00:38.5488 INFO Returning 24 permission
+2021-06-10 17:15:15.3732 INFO fetching all permission from the storage
+2021-06-10 17:15:15.4746 INFO Returning 24 permission
+2021-06-10 17:15:45.1862 INFO fetching all permission from the storage
+2021-06-10 17:15:45.1862 INFO Returning 24 permission

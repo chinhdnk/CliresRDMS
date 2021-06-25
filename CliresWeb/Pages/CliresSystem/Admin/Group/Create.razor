@@ -3,7 +3,7 @@
 @inject NavigationManager navigationManager
 @inject IGroupService groupService
 @inject ILanguageContainerService languageContainer
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime jsRuntime
 
 @attribute [Authorize(Roles = "GROUP_CREATE")]
 <!-- Content Header (Page header) -->
@@ -42,10 +42,10 @@
                                 <InputText type="text" id="inputName" @bind-Value="group.GroupName" class="form-control" />
                             </div>
                             <div class="form-group">
-                                <label for="inputStatus">@languageContainer.Keys["common:status"]</label>
+                                <label for="inputStatus">@languageContainer.Keys["label_common:status"]</label>
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" @bind="group.Status">
-                                    <label class="form-check-label" for="status">@languageContainer.Keys["common:active"]</label>
+                                    <label class="form-check-label" for="status">@languageContainer.Keys["label_common:active"]</label>
                                 </div>
                             </div>
                         </EditForm>
@@ -59,7 +59,7 @@
     <div class="row">
         <div class="col-12">
             <NavLink href="@($"/cliressystem/admin/group")" class="btn btn-secondary">Cancel</NavLink>
-            <button class="btn btn-success float-right" @onclick="Save">@languageContainer.Keys["common:save"]</button>
+            <button class="btn btn-success float-right" @onclick="Save">@languageContainer.Keys["button:save"]</button>
         </div>
     </div>
 </section>
@@ -85,7 +85,7 @@
 
         if (string.IsNullOrWhiteSpace(group.GroupName))
         {
-            alertComponent.ErrorMessage = "Group name is required";
+            alertComponent.Message = "Group name is required";
             alertComponent.Show();
             bSuccess = false;
         }
@@ -94,8 +94,8 @@
         {
             await groupService.CreateGroupAsync(group);
 
-            await JSRuntime.InvokeVoidAsync("Toast.fire", "info", "Save change success");
-            navigationManager.NavigateTo($"/cliresystem/admin/group");
+            await jsRuntime.InvokeVoidAsync("showAlert", "info", "Save change success");
+            navigationManager.NavigateTo("/cliressystem/admin/group");
         }
     }
 

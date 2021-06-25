@@ -1,16 +1,12 @@
 ﻿using Infrastructure.Constant;
 using Infrastructure.Entities.CliresSystem;
 using Infrastructure.Models;
-using ApplicationCore.Repositories.CiresSystem;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Filters;
 using WebAPI.Auth;
 using Infrastructure.Services;
+using ApplicationCore.Repositories.Account;
 
 namespace WebAPI.Controllers.Account
 {

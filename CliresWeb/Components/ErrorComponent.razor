@@ -1,4 +1,4 @@
-﻿@page "/error"
+﻿@page "/error/{errorCode:int}"
 @inject ILanguageContainerService languageContainer
 
 <section class="content-header">
@@ -22,7 +22,7 @@
                             <h5><i class="icon fas fa-exclamation-triangle"></i> @errorCode</h5>
                             @errorMessage
                         </div>
-                        <img src="dist/img/error_404.png" alt="404" class="img-fluid pad">
+                        @*<img src="img/error_404.png" alt="404" class="img-fluid pad">*@
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -35,11 +35,23 @@
 </section>
 @code {
     [Parameter]
-    public string errorCode { get; set; }
+    public string errorCode { get; set; } = "500";
     [Parameter]
-    public string errorMessage { get; set; } = "Something went really wrong. Please contact administrator.";
+    public string errorMessage { get; set; } = "Something went really wrong. Please contact administrator";
     protected override void OnInitialized()
     {
         languageContainer.InitLocalizedComponent(this);
+        switch(errorCode)
+        {
+            case "404":
+                errorMessage = languageContainer.Keys["error_page:error_404_msg"];
+                break;
+            case "401":
+                errorMessage = languageContainer.Keys["error_page:unauthorized"];
+                break;
+            default:
+                errorMessage = languageContainer.Keys["error_page:system_error_msg"];
+                break;     
+        }
     }
 }

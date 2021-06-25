@@ -2,7 +2,7 @@
 using Infrastructure.Models;
 using System.Threading.Tasks;
 
-namespace ApplicationCore.Repositories.CiresSystem
+namespace ApplicationCore.Repositories.Account
 {
     public interface IAccountRepository
     {

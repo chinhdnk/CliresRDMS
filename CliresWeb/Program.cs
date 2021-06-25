@@ -10,6 +10,7 @@ using AKSoftware.Localization.MultiLanguages;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using CliresWeb.Services;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace CliresWeb
 {
@@ -32,15 +33,19 @@ namespace CliresWeb
 
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
+            builder.Services.AddHttpClient("WebApi", (sp, cl) =>
+            {
+                cl.BaseAddress = new Uri("https://localhost:44347");
+                cl.EnableIntercept(sp);
+            });
 
-            builder.Services.AddSingleton<IWebApiExecuter>(sp =>
-                new WebApiExecuter(
-                    "https://localhost:44347",//WebAPI
-                    new HttpClient(),
-                    sp.GetRequiredService<ITokenRepository>()));
+            builder.Services.AddScoped(
+                sp => sp.GetService<IHttpClientFactory>().CreateClient("WebApi"));
 
+            builder.Services.AddHttpClientInterceptor();
+
+            //add Clires web's services
             builder.Services.AddWebServices();
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
             await builder.Build().RunAsync();
         }

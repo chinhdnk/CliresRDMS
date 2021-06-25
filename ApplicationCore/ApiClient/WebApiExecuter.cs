@@ -1,24 +1,18 @@
-﻿using Infrastructure.Constant;
+﻿using ApplicationCore.Repositories.Account;
+using Infrastructure.Constant;
 using Infrastructure.Models;
-using Microsoft.AspNetCore.Components;
-using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ApplicationCore.Repositories.ApiClient
 {
     public class WebApiExecuter : IWebApiExecuter
     {
-        private readonly string baseUrl;
         private readonly HttpClient httpClient;
         private readonly ITokenRepository tokenRepository;
-        public WebApiExecuter(string baseUrl, HttpClient httpClient, ITokenRepository tokenRepository)
+        public WebApiExecuter(HttpClient httpClient, ITokenRepository tokenRepository)
         {
-            this.baseUrl = baseUrl;
             this.httpClient = httpClient;
             this.tokenRepository = tokenRepository;
             httpClient.DefaultRequestHeaders.Clear();
@@ -29,8 +23,7 @@ namespace ApplicationCore.Repositories.ApiClient
         public async Task<T> InvokeGet<T>(string uri)
         {
             await AddTokenHeader();
-            var response = await httpClient.GetAsync(GetUrl(uri));
-            await HandleError(response);
+            var response = await httpClient.GetAsync(uri);
             var content = await response.Content.ReadFromJsonAsync<T>();
             return content;
         }
@@ -38,58 +31,35 @@ namespace ApplicationCore.Repositories.ApiClient
         public async Task<T> InvokePost<T>(string uri, T obj)
         {
             await AddTokenHeader();
-            var response = await httpClient.PostAsJsonAsync(GetUrl(uri), obj);
-            await HandleError(response);
-
+            var response = await httpClient.PostAsJsonAsync(uri, obj);
             return await response.Content.ReadFromJsonAsync<T>();
         }
 
         public async Task<T> InvokeLoginPost<T>(string uri, AuthenticateRequest obj)
         {
             await AddTokenHeader();
-            var response = await httpClient.PostAsJsonAsync(GetUrl(uri), obj);
-            await HandleError(response);
-
+            var response = await httpClient.PostAsJsonAsync(uri, obj);
             return await response.Content.ReadFromJsonAsync<T>();
         }
 
         public async Task<string> InvokePostReturnString<T>(string uri, T obj)
         {
             await AddTokenHeader();
-            var response = await httpClient.PostAsJsonAsync(GetUrl(uri), obj);
-            await HandleError(response);
-
+            var response = await httpClient.PostAsJsonAsync(uri, obj);
             return await response.Content.ReadAsStringAsync();
         }
 
         public async Task InvokePut<T>(string uri, T obj)
         {
             await AddTokenHeader();
-            var response = await httpClient.PutAsJsonAsync(GetUrl(uri), obj);
-            await HandleError(response);
+            var response = await httpClient.PutAsJsonAsync(uri, obj);
         }
 
         public async Task<bool> InvokeDelete(string uri)
         {
             await AddTokenHeader();
-            var response = await httpClient.DeleteAsync(GetUrl(uri));
-            await HandleError(response);
-            return true;
-        }
-        private async Task HandleError(HttpResponseMessage response)
-        {
-            if (!response.IsSuccessStatusCode)
-            {
-                var statuscode = response.StatusCode;
-                //navManager.NavigateTo("/error" + "/" + statuscode);
-                var error = await response.Content.ReadAsStringAsync();
-                throw new HttpRequestException(error);
-            }
-        }
-
-        private string GetUrl(string uri)
-        {
-            return $"{baseUrl}/{uri}";
+            var response = await httpClient.DeleteAsync(uri);
+            return response.IsSuccessStatusCode;
         }
 
         private async Task AddTokenHeader()

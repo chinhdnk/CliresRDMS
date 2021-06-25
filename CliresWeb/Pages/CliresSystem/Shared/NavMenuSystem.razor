@@ -1,0 +1,83 @@
+﻿@inject ILanguageContainerService languageContainer
+@inject IMenuService menuService
+
+<AuthorizeView>
+    <Authorized>
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="#" class="brand-link">
+                <img src="img/logo.png" alt="Clires Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light" style="font-size: 24px;">Clires EDC</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="info">
+                        <a href="/cliressystem/home" class="d-block" style="font-size: 20px;">@languageContainer.Keys["layout:admin_page"]</a>
+                    </div>
+                </div>
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                        with font-awesome or any other icon font library -->
+                        @if (menuList == null)
+                        {
+                            <li>Loading...</li>
+                        }
+                        else
+                        {
+                            @foreach (var mainMenu in menuList)
+                            {
+                                <li class="nav-item has-treeview menu-open">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas @mainMenu.Icon"></i>
+                                        <p>
+                                            @languageContainer.Keys[$"layout:{mainMenu.Title}"]
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    @if (mainMenu.subMenus != null)
+                                    {
+                                        <ul class="nav nav-treeview">
+                                            @foreach (var subMenu in mainMenu.subMenus)
+                                            {
+                                                <li class="nav-item pad20">
+                                                    <NavLink href="@("/cliressystem"+mainMenu.Link+subMenu.Link)" class="nav-link">
+                                                        <i class="far nav-icon @subMenu.Icon"></i>
+                                                        <p>@languageContainer.Keys[$"layout:{subMenu.Title}"]</p>
+                                                    </NavLink>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+
+                                </li>
+                            }
+                        }
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+    </Authorized>
+</AuthorizeView>
+
+@code
+{
+    [Parameter]
+    public string TypeMenu { get; set; }
+    public IEnumerable<MainMenu> menuList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        menuList = await menuService.ViewMenusAsync();
+        languageContainer.InitLocalizedComponent(this);
+    }
+
+}
+

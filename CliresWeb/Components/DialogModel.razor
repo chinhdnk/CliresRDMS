@@ -1,4 +1,5 @@
-﻿@if (showConfirmation)
+﻿@inject ILanguageContainerService languageContainer
+@if (showConfirmation)
 {
     <div class="modal fade show d-block" id="exampleModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -16,11 +17,11 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
                             @onclick="() => OnConfirmationChange(false)">
-                        Cancel
+                        @languageContainer.Keys["button:cancel"]
                     </button>
                     <button type="button" class="btn btn-danger"
                             @onclick="() => OnConfirmationChange(true)">
-                        Delete
+                        @languageContainer.Keys["button:delete"]
                     </button>
                 </div>
             </div>
@@ -34,6 +35,11 @@
     public string confirmationTitle { get; set; } = "Confirm Delete";
 
     public string confirmationMessage { get; set; } = "Are you sure you want to delete";
+
+    protected override void OnInitialized()
+    {
+        languageContainer.InitLocalizedComponent(this);
+    }
 
     public void Show()
     {

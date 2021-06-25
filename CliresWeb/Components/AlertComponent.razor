@@ -1,7 +1,7 @@
 ﻿<div class="alert @AlertTheme"
      style="@($"display: {display}")"
      role="alert">
-    @((MarkupString)ErrorMessage)
+    @((MarkupString)Message)
 
 </div>
 
@@ -9,7 +9,7 @@
     string display = "none";
     public string AlertTheme { get; set; } = "alert-warning";
 
-    public string ErrorMessage { get; set; }
+    public string Message { get; set; }
 
     public void Show()
     {
@@ -20,7 +20,7 @@
     public void Dismiss()
     {
         display = "none";
-        ErrorMessage = string.Empty;
+        Message = string.Empty;
     }
 
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApplicationCore.Repositories.CiresSystem
+namespace ApplicationCore.Repositories.CliresSystem
 {
     public interface IPermissionRepository
     {

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using BC = BCrypt.Net.BCrypt;
 
 
-namespace ApplicationCore.Repositories.CiresSystem
+namespace ApplicationCore.Repositories.Account
 {
     public class AccountRepository : IAccountRepository
     {

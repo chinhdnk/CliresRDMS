@@ -1,5 +1,6 @@
 ﻿@page "/cliressystem/admin/group"
 
+@inject IJSRuntime JS
 @inject NavigationManager navigationManager
 @inject IGroupService groupService
 @inject ILanguageContainerService languageContainer
@@ -29,7 +30,9 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">DataTable with minimal features & hover style</h3>
+                        <AuthorizeView Roles="GROUP_CREATE">
+                            <button class="btn btn-primary" @onclick="AddGroup">@languageContainer.Keys["group:add_group"]</button>
+                        </AuthorizeView>
                     </div>
                     <div class="card-body">
                         @if (groups != null)
@@ -39,10 +42,10 @@
                                     <tr>
                                         <th>#</th>
                                         <th>@languageContainer.Keys["group:group_name"]</th>
-                                        <th>@languageContainer.Keys["common:status"]</th>
-                                        <th>@languageContainer.Keys["common:created_by"]</th>
-                                        <th>@languageContainer.Keys["common:created_date"]</th>
-                                        <th>@languageContainer.Keys["common:action"]</th>
+                                        <th>@languageContainer.Keys["label_common:status"]</th>
+                                        <th>@languageContainer.Keys["label_common:created_by"]</th>
+                                        <th>@languageContainer.Keys["label_common:created_date"]</th>
+                                        <th>@languageContainer.Keys["label_common:action"]</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,11 +68,11 @@
                                             <td>
                                                 <AuthorizeView Roles="PERMISSION_EDIT">
                                                     <NavLink href="@($"/cliressystem/admin/group/{group.GroupID}")" class="btn btn-info btn-xs">
-                                                        @languageContainer.Keys["common:edit"]
+                                                        @languageContainer.Keys["button:edit"]
                                                     </NavLink>
                                                 </AuthorizeView>
                                                 <AuthorizeView Roles="PERMISSION_DELETE">
-                                                    <button type="button" @onclick="() => DeleteGroup(group.GroupName)" class="btn btn-danger btn-xs">@languageContainer.Keys["common:delete"]</button>
+                                                    <button type="button" @onclick="() => DeleteGroup(group.GroupID, group.GroupName)" class="btn btn-danger btn-xs">@languageContainer.Keys["button:delete"]</button>
                                                 </AuthorizeView>
                                             </td>
                                         </tr>
@@ -80,11 +83,6 @@
                         }
 
                     </div>
-                    <div class="card-footer">
-                        <AuthorizeView Roles="GROUP_CREATE">
-                            <button class="btn btn-primary" @onclick="AddGroup">@languageContainer.Keys["group:add_group"]</button>
-                        </AuthorizeView>
-                    </div>
                     <!-- /.col -->
                 </div>
             </div>
@@ -94,11 +92,12 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-<DialogModel @ref="dialogModel"></DialogModel>
+<DialogModel @ref="dialogModel" ConfirmationChanged="ClickHandler"></DialogModel>
 
 @code {
     DialogModel dialogModel;
     IEnumerable<Group> groups;
+    int delGroupId = 0;
     bool showModel;
     int index = 1;
     protected override async Task OnInitializedAsync()
@@ -112,12 +111,34 @@
         navigationManager.NavigateTo($"/cliressystem/admin/group/addgroup");
     }
 
-    private void DeleteGroup(string groupName)
+    private void DeleteGroup(int groupID, string groupName)
     {
-        dialogModel.confirmationTitle = "Confirm Delete";
-        dialogModel.confirmationMessage = $"Do you want to delete this group {groupName}";
+        delGroupId = groupID;
+        dialogModel.confirmationTitle = languageContainer.Keys["dialog:delete_title"];
+        dialogModel.confirmationMessage = @languageContainer.Keys["dialog:delete_message", new
+        {
+            item = groupName
+        }];
         dialogModel.Show();
 
+    }
+
+    async Task ClickHandler(bool value)
+    {
+        bool result = true;
+        if (value)
+        {
+            result = await groupService.DeleteGroupAsync(delGroupId);
+        }
+        if (result)
+        {
+            await JS.InvokeVoidAsync("showAlert", "success", languageContainer.Keys["dialog:delete_success"]);
+            groups = await groupService.ViewGroupAsync();
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("showAlert", "error", languageContainer.Keys["dialog:delete_error"]);
+        }
     }
 }
 

@@ -1,0 +1,50 @@
+﻿@page "/cliressystem/dynamicdb"
+@inject IDynamicDBService dynamicService
+
+<h3>DynamicDatabase</h3>
+
+<button @onclick="Get49DX">Get patients from 49DX</button>
+
+<button @onclick="GetISARIC">Get patients from ISARIC</button>
+@if (patients != null)
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Study Code</th>
+                <th>Added By</th>
+                <th>Enroll Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in patients)
+            {
+                <tr>
+                    <td>
+                        @item.Studycode
+                    </td>
+                    <td>
+                        @item.Addedby
+                    </td>
+                    <td>
+                        @item.Enrolldate.Value
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+@code {
+
+    private IEnumerable<TblStudyCode> patients;
+    private async Task Get49DX()
+    {
+        patients = await dynamicService.ViewPatientsAsync("api/cliressystem/dynamic?project=_49DX_V1");
+    }
+
+    private async Task GetISARIC()
+    {
+        patients = await dynamicService.ViewPatientsAsync("api/cliressystem/dynamic?project=ISARIC_nCoV_P1");
+    }
+}

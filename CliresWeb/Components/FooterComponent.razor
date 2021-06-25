@@ -1,0 +1,15 @@
+﻿@inject ILanguageContainerService languageContainer
+<footer class="main-footer text-sm">
+    <strong>Copyright &copy; 2014-2019 <a href="http://clires.com"> CliresV3.0</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+        <b>@languageContainer.Keys["layout:version"]</b> 3.0.5
+    </div>
+</footer>
+@code
+{
+    protected override void OnInitialized()
+    {
+        languageContainer.InitLocalizedComponent(this);
+    }
+}

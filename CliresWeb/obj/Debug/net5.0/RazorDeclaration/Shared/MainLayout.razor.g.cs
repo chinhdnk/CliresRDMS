@@ -13,141 +13,141 @@ namespace CliresWeb.Shared
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 1 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 1 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 2 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using System.Net.Http.Json;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 3 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 4 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 5 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 6 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 7 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 8 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 9 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using Microsoft.AspNetCore.Components.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 10 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using Microsoft.AspNetCore.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 13 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 11 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
+using AKSoftware.Localization.MultiLanguages;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 12 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
+using AKSoftware.Localization.MultiLanguages.Blazor;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 14 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using CliresWeb;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 14 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 15 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using CliresWeb.Shared;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 15 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
-using CliresWeb.Controls;
+#line 16 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
+using CliresWeb.Components;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 16 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
-using CliresWeb.Pages.Auth;
+#line 17 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
+using CliresWeb.Services;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 17 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
-using CliresWeb.Pages.Admin;
+#line 18 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
+using CliresWeb.Pages.Account;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 19 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
-using ApplicationCore.Authentication;
+#line 21 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
+using ApplicationCore.Repositories.Account;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 20 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
-using ApplicationCore.Services;
+#line 22 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
+using ApplicationCore.Services.Account;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 21 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
+#line 24 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\_Imports.razor"
 using Infrastructure.Models;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 22 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
-using Infrastructure.Models.Admin;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 23 "C:\Users\ChinhDo\Working\Workingcurrent\CliresRDMS\CliresWeb\_Imports.razor"
-using Infrastructure.Entities.CliresSystem;
 
 #line default
 #line hidden
@@ -159,6 +159,18 @@ using Infrastructure.Entities.CliresSystem;
         {
         }
         #pragma warning restore 1998
+#nullable restore
+#line 76 "C:\C_WORKING\Clires_v3.0\CliresRDMS\CliresWeb\Shared\MainLayout.razor"
+ 
+    protected override void OnInitialized()
+    {
+        languageContainer.InitLocalizedComponent(this);
+    }
+
+#line default
+#line hidden
+#nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private ILanguageContainerService languageContainer { get; set; }
     }
 }
 #pragma warning restore 1591

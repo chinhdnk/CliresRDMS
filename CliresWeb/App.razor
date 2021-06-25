@@ -1,45 +1,32 @@
 @inject IJSRuntime JSRuntime
 @inject ILanguageContainerService languageContainer
 
-<Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
-    <Found Context="routeData">
-        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-            <NotAuthorized>
-                @if (!context.User.Identity.IsAuthenticated)
-                {
-                    <Login></Login>
-                }
-                else
-                {
-                    <ErrorComponent errorCode="401" errorMessage=@languageContainer.Keys["error_page:unauthorized"]></ErrorComponent>
-                }
-            </NotAuthorized>
-        </AuthorizeRouteView>
-    </Found>
-    <NotFound>
-        <CascadingAuthenticationState>
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @if (!context.User.Identity.IsAuthenticated)
+                    {
+                        <Login></Login>
+                    }
+                    else
+                    {
+                        <ErrorComponent errorCode="401" errorMessage=@languageContainer.Keys["error_page:unauthorized"]></ErrorComponent>
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+
             <LayoutView Layout="@typeof(MainLayout)">
                 <!-- Main content -->
                 <ErrorComponent errorCode="404" errorMessage=@languageContainer.Keys["error_page:error_404"]></ErrorComponent>
-                <!--<section class="content">
-                    <div class="error-page">
-                        <h2 class="headline text-warning"> 404</h2>
-                        <div class="error-content">
-                            <h3><i class="fas fa-exclamation-triangle text-warning"></i> @languageContainer.Keys["error_page:error_404"]</h3>
-                            <p>
-                                @languageContainer.Keys["error_page:error_404_msg"]
-                            </p>
-                        </div>-->
-                        <!-- /.error-content -->
-                    <!--</div>-->
-                    <!-- /.error-page -->
-                <!--</section>-->
-                <!-- /.content -->
             </LayoutView>
-        </CascadingAuthenticationState>
-    </NotFound>
-</Router>
 
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
 @code
 {
     protected override async Task OnInitializedAsync()

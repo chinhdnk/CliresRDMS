@@ -25,7 +25,7 @@ namespace ApplicationCore.Repositories.CliresSystem
                 IEnumerable<Group> groups = (from u in items select new Group(u));
                 return groups;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -39,7 +39,7 @@ namespace ApplicationCore.Repositories.CliresSystem
                 Group group = Convert2Model(item);
                 return group;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -65,7 +65,7 @@ namespace ApplicationCore.Repositories.CliresSystem
                 await dbContext.SaveChangesAsync();
                 return DBStatus.SUCCESS;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return DBStatus.FAIL; ;
             }
@@ -84,26 +84,26 @@ namespace ApplicationCore.Repositories.CliresSystem
                 await dbContext.SaveChangesAsync();
                 return DBStatus.SUCCESS;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return DBStatus.FAIL;
             }
 
         }
-        public async Task<int> DeleteGroup(int groupId)
+        public async Task<bool> DeleteGroup(int groupId)
         {
             try
             {
                 TblGroup item = await dbContext.TblGroups.FindAsync(groupId);
                 if (item == null)
-                    return DBStatus.NOT_FOUND;
+                    return false;
                 dbContext.RemoveRange(item);
                 await dbContext.SaveChangesAsync();
-                return DBStatus.SUCCESS;
+                return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return DBStatus.FAIL;
+                return false;
             }
 
         }

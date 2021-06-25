@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
-namespace ApplicationCore.Repositories
+namespace ApplicationCore.Repositories.Account
 {
     public class TokenRepository : ITokenRepository
     {

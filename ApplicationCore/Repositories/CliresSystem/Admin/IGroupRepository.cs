@@ -8,7 +8,7 @@ namespace ApplicationCore.Repositories.CliresSystem
     {
         Task<bool> CheckGroupExist(int groupID, string groupName);
         Task<int> CreateGroup(Group group);
-        Task<int> DeleteGroup(int groupId);
+        Task<bool> DeleteGroup(int groupId);
         Task<Group> GetGrouByID(int groupId);
         Task<IEnumerable<Group>> GetGroupList();
         Task<int> UpdateGroup(int groupId, Group group);
