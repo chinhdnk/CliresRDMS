@@ -1,5 +1,5 @@
 # CliresRDMS
-This is a demo for the initial project I introduce to my team. My team intended to upgrade our old system from Asp.net MVC to Asp.net Core and Blazor Web assembly. I'm responsible for building the project structure, so I developed it with clean architecture, and new technologies and introduced it to my team
+This is a demo for the new project I showed to my team. My team intended to upgrade our old system from Asp.net MVC to Asp.net Core and Blazor Web assembly. I'm responsible for building the project structure, so I developed it with clean architecture, and new technologies and introduced it to my team
 ## User interfaces
 HOME -UI
 ![Project structure](/Images/clires-web-ui.png "Project structure")
