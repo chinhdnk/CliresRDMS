@@ -1,0 +1,176 @@
+{
+  "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\CliresWeb.csproj",
+  "Configuration": {
+    "ConfigurationName": "Default",
+    "LanguageVersion": "5.0",
+    "Extensions": []
+  },
+  "ProjectWorkspaceState": {
+    "TagHelpers": [],
+    "CSharpLanguageVersion": 900
+  },
+  "RootNamespace": "CliresWeb",
+  "Documents": [
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Components\\ProjectComponent.razor",
+      "TargetPath": "Components\\ProjectComponent.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\Admin\\Group\\Index.razor",
+      "TargetPath": "Pages\\CliresSystem\\Admin\\Group\\Index.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Shared\\SystemLayout.razor",
+      "TargetPath": "Shared\\SystemLayout.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Components\\FooterComponent.razor",
+      "TargetPath": "Components\\FooterComponent.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\Admin\\Permission\\Create.razor",
+      "TargetPath": "Pages\\CliresSystem\\Admin\\Permission\\Create.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Components\\ProjectDesignComponent.razor",
+      "TargetPath": "Components\\ProjectDesignComponent.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\Admin\\Permission\\Index.razor",
+      "TargetPath": "Pages\\CliresSystem\\Admin\\Permission\\Index.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Components\\LoginStatusComponent.razor",
+      "TargetPath": "Components\\LoginStatusComponent.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\App.razor",
+      "TargetPath": "App.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\Admin\\Permission\\Edit.razor",
+      "TargetPath": "Pages\\CliresSystem\\Admin\\Permission\\Edit.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\DynamicDatabase.razor",
+      "TargetPath": "Pages\\CliresSystem\\DynamicDatabase.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\Account\\Register.razor",
+      "TargetPath": "Pages\\Account\\Register.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Components\\CliresSystemComponent.razor",
+      "TargetPath": "Components\\CliresSystemComponent.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\Home.razor",
+      "TargetPath": "Pages\\Home.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Components\\LanguageSelector.razor",
+      "TargetPath": "Components\\LanguageSelector.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Shared\\MainLayout.razor",
+      "TargetPath": "Shared\\MainLayout.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\Shared\\NavMenuSystem.razor",
+      "TargetPath": "Pages\\CliresSystem\\Shared\\NavMenuSystem.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\Account\\ChangePassword.razor",
+      "TargetPath": "Pages\\Account\\ChangePassword.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\UserIdentity.razor",
+      "TargetPath": "Pages\\UserIdentity.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\Admin\\User\\User.razor",
+      "TargetPath": "Pages\\CliresSystem\\Admin\\User\\User.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\Admin\\Group\\Create.razor",
+      "TargetPath": "Pages\\CliresSystem\\Admin\\Group\\Create.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Components\\AlertComponent.razor",
+      "TargetPath": "Components\\AlertComponent.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Components\\DialogModel.razor",
+      "TargetPath": "Components\\DialogModel.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\_Imports.razor",
+      "TargetPath": "_Imports.razor",
+      "FileKind": "componentImport"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\Admin\\Permission\\Delete.razor",
+      "TargetPath": "Pages\\CliresSystem\\Admin\\Permission\\Delete.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Shared\\LoginLayout.razor",
+      "TargetPath": "Shared\\LoginLayout.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\Account\\Login.razor",
+      "TargetPath": "Pages\\Account\\Login.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Components\\ErrorComponent.razor",
+      "TargetPath": "Components\\ErrorComponent.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\_Imports.razor",
+      "TargetPath": "Pages\\CliresSystem\\_Imports.razor",
+      "FileKind": "componentImport"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\Home.razor",
+      "TargetPath": "Pages\\CliresSystem\\Home.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\CliresSystem\\Admin\\Group\\Edit.razor",
+      "TargetPath": "Pages\\CliresSystem\\Admin\\Group\\Edit.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Chinh Do\\Desktop\\CliresRDMS\\CliresWeb\\Pages\\Account\\ResetPassword.razor",
+      "TargetPath": "Pages\\Account\\ResetPassword.razor",
+      "FileKind": "component"
+    }
+  ],
+  "SerializationFormat": "0.2"
+}
