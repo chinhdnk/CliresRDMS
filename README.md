@@ -83,7 +83,7 @@ Admin page
 - Using Scaffold-DbContext command to scaffold a DbContext and entity type classes for a database.
   
     <i>Scaffold-DbContext "Server=(local);Database=CLIRES_SYSTEM;User ID=sa;Password=xxxxx;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities/CliresSystem -Context CliresSystemDBContext –Force
-    As the result, a context class and entity classes are generated : CliresSystemDBContext, TblAccount, TblGroup…</i>
+- As the result, a context class and entity classes are generated : CliresSystemDBContext, TblAccount, TblGroup…</i>
 
 ![Project structure](/Images/ef-db.png "Project structure")
 

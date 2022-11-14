@@ -61,7 +61,7 @@ namespace WebAPI.Auth
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(claims),
-                        Expires = DateTime.UtcNow.AddDays(Int32.Parse(configuration["Jwt:ExpireDay"])),
+                        Expires = DateTime.UtcNow.AddMinutes(Int32.Parse(configuration["Jwt:ExpireMinutes"])),
                         SigningCredentials = new SigningCredentials(
                                 new SymmetricSecurityKey(secrectKey),
                                 SecurityAlgorithms.HmacSha256Signature
